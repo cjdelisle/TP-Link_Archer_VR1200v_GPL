@@ -1,0 +1,1636 @@
+####################################################
+#
+#New Model Create         
+#
+####################################################
+
+model_build:
+ifeq ($(strip $(NEW_MODEL)),)
+	$(error "You have to define NEW_MODEL, such as TDW9960V1_IN_CBB")
+endif
+	cp -pR	config/$(MODEL).config config/$(NEW_MODEL).config
+	cp -pR	$(TOP_PATH)/$(SUPPLIER)/modules/private/wifi/wireless_bin/$(MODEL) $(TOP_PATH)/$(SUPPLIER)/modules/private/wifi/wireless_bin/$(NEW_MODEL)
+	cp -pR	$(PROFILE_PATH)/$(MODEL).profile $(PROFILE_PATH)/$(NEW_MODEL).profile
+	cp -pR	$(KERNELPATH)/$(CPU_TYPE)_$(MODEL)_config $(KERNELPATH)/$(CPU_TYPE)_$(NEW_MODEL)_config
+	cp -pR	$(TOP_PATH)/targets/fs.dir/etc/init.d/rcS_$(MODEL) $(TOP_PATH)/targets/fs.dir/etc/init.d/rcS_$(NEW_MODEL)
+	cp -pR	$(CONFFILE_PATH)/oem/$(MODEL) $(CONFFILE_PATH)/oem/$(NEW_MODEL)
+
+####################################################
+#
+#Compilation environment         
+#
+####################################################
+env_build:
+ifneq ($(shell id -u), 0)
+	@echo "This target must be run as root."
+else
+#	@mkdir /opt/trendchip/
+#	@echo "Uncompressing toolchain..."
+#	@cp $(TOP_PATH)/$(SUPPLIER)/tools/toolchain/mips-linux-uclibc-4.3.6-v2.tgz /opt/trendchip/
+#	@cd /opt/trendchip/ && tar -zxf mips-linux-uclibc-4.3.6-v2.tgz && rm -f mips-linux-uclibc-4.3.6-v2.tgz
+	
+#	@cp $(TOP_PATH)/$(SUPPLIER)/tools/toolchain/mips-linux-uclibc.tgz /opt/trendchip/
+#	@cd /opt/trendchip/ && tar -jxf mips-linux-uclibc.tgz && rm -f mips-linux-uclibc.tgz
+#add by xjt for PV-W42T-1200ACG,16-06-01,fix pppoa bug
+	cp -f $(TOP_PATH)/$(SUPPLIER)/tools/atm.h $(SYSROOT)/usr/include/linux/atm.h
+#end add xjt
+endif
+	@echo "env_build done!"
+
+####################################################
+#
+#Menuconfig         
+#
+####################################################
+menuconfig:
+	cp $(BUILD_PATH)/config/$(MODEL).config $(BUILD_PATH)/.config
+	$(BUILD_PATH)/scripts/config/mconf $(BUILD_PATH)/sysdeps/linux/Config.in
+	cp $(BUILD_PATH)/.config $(BUILD_PATH)/config/$(MODEL).config
+	
+	cd $(TOP_PATH)/mtk && $(MAKE) PROFILE=$(CPU_TYPE)_demo menuconfig; \
+	cp $(PROFILE_PATH)/$(CPU_TYPE)_demo.profile $(PROFILE_PATH)/$(MODEL).profile
+	
+####################################################
+#
+#Build bootloader          
+#
+####################################################
+boot_build:
+	@echo "Make Boot Build"
+
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo bootbase_clean; make PROFILE=$(CPU_TYPE)_demo bootbase
+	test -d $(BOOT_TG_PATH) || mkdir -p $(BOOT_TG_PATH)
+#	cp $(TOP_PATH)/$(SUPPLIER)/bootrom/tcboot.bin $(BOOT_TG_PATH)/boot.bin
+
+####################################################
+#
+#Build linux kernel           
+#
+####################################################
+kernel_build:
+	@echo "Make Kernel Build"
+	cp $(KERNELPATH)/$(CPU_TYPE)_$(MODEL)_config $(KERNELPATH)/.config
+	cd $(KERNELPATH) && $(MAKE) V=2 linux.7z -j 4
+	test -d $(KERNEL_TG_PATH) || mkdir -p $(KERNEL_TG_PATH)
+	cp $(KERNELPATH)/linux.7z $(KERNEL_TG_PATH)/
+	cp $(KERNELPATH)/vmlinux $(KERNEL_TG_PATH)/
+
+misc_kernel_build:
+	@echo "Make Kernel Build"
+	#cp $(KERNELPATH)/$(CPU_TYPE)_$(MODEL)_config $(KERNELPATH)/.config
+	#cd $(KERNELPATH) && $(MAKE) V=2 linux.7z
+	cd $(TOP_PATH)/$(SUPPLIER) && $(MAKE) PROFILE=$(CPU_TYPE)_demo kernel_test
+	test -d $(KERNEL_TG_PATH) || mkdir -p $(KERNEL_TG_PATH)
+	cp $(KERNELPATH)/linux.7z $(KERNEL_TG_PATH)/
+	cp $(KERNELPATH)/vmlinux $(KERNEL_TG_PATH)/
+
+
+kernel_menuconfig:
+	cp $(KERNELPATH)/$(CPU_TYPE)_$(MODEL)_config $(KERNELPATH)/.config
+	cd $(KERNELPATH) && $(MAKE) menuconfig
+	cp $(KERNELPATH)/.config $(KERNELPATH)/$(CPU_TYPE)_$(MODEL)_config 
+	@echo "Replace Kernel Config File"
+
+####################################################
+#
+#Build all kernel modules
+#
+####################################################
+modules_build:kernel_modules public_modules misc_modules ipt_modules login_modules wanBlock_modules wlan_modules dual_modules
+
+kernel_modules:
+	@echo "Making Kernel Modules"
+	cp $(KERNELPATH)/$(CPU_TYPE)_$(MODEL)_config $(KERNELPATH)/.config
+	cd $(KERNELPATH) && $(MAKE) modules
+	cd $(KERNELPATH) && $(MAKE) DEPMOD=true modules_install
+	test -d $(MODULE_TG_PATH) || mkdir -p $(MODULE_TG_PATH) && mkdir -p $(MODULE_TG_PATH)/kmdir/
+	cp -pR $(INSTALL_MOD_PATH)/lib/modules/$(KERNELVERSION)/* $(MODULE_TG_PATH)/kmdir/
+
+public_modules:
+	@echo "Making public modules"
+
+ifeq ($(INCLUDE_USB_OVER_IP_TPLINK), y)
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/public/usbip-0.1.7 && $(MAKE)
+endif
+
+ifeq ($(INCLUDE_PPTP), y)
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/public/accel-pptp-0.8.5 && $(MAKE)
+endif
+
+ifeq ($(INCLUDE_L2TP), y)
+ifeq ($(KERNELVERSION), 2.6.22.15)
+	@echo "Kernel version is lower than 2.6.23, use pppol2tp-kmod-0.17"
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/public/pppol2tp-kmod-0.17 && $(MAKE)
+else
+	@echo "Kernel version is not lower than 2.6.23, use pppol2tp v1.0 driver in kernel"
+endif
+endif
+
+
+misc_modules:
+	@echo "Making Other Modules"
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo igmpsnooping
+#	cp -pR $(TOP_PATH)/$(SUPPLIER)/modules/private/net/igmpsnooping/igmpsnoop.ko $(MODULE_TG_PATH)
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo drivers
+#	cp -pR $(TOP_PATH)/$(SUPPLIER)/filesystem/lib/modules/* $(MODULE_TG_PATH)
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo modules
+#	cp -pR $(TOP_PATH)/$(SUPPLIER)/filesystem/lib/modules/* $(MODULE_TG_PATH)
+
+ifneq ($(strip $(INCLUDE_VOIP)),) 
+#	cd $(TP_MODULES_PATH)/voip/ && $(MAKE)  
+endif
+
+ipt_modules:
+	@echo "Making ipt_STAT Modules"
+
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo ipt_modules 
+#	cd $(MODULES_PATH)/ipt_STAT && cp ipt_STAT.ko $(MODULE_TG_PATH)
+	
+login_modules:
+#	@echo "Making domain login Modules"
+
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo login_modules 
+#	cd $(MODULES_PATH)/domain_login && cp tp_domain.ko $(MODULE_TG_PATH)
+		
+dual_modules:
+	@echo "Making dual image Modules"
+ifeq ($(strip $(INCLUDE_DUAL_IMAGE_ZYXEL)), y) 
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo dual_modules 
+	cd $(MODULES_PATH)/dual_gpio && cp dual_gpio.ko $(MODULE_TG_PATH)
+endif
+		
+wlan_modules:
+#	@echo "Making WLAN Modules"
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo wlan
+#	cp -pR $(TOP_PATH)/$(SUPPLIER)/filesystem/lib/modules/* $(MODULE_TG_PATH)
+
+#frl add,2015-10-23
+wanBlock_modules:
+ifeq ($(INCLUDE_WAN_BLOCK), y)
+	@echo "Making wan block Modules"
+	cd $(MODULES_PATH)/wportal && $(MAKE)
+	cd $(MODULES_PATH)/wportal && cp wportal.ko $(MODULE_TG_PATH)
+endif
+#add end
+
+iqos_modules:
+ifeq ($(INCLUDE_APP_IQOS),y)
+	@echo "Making iqos Modules"
+	@echo "Making appid.ko"
+	cd $(MODULES_PATH)/qos-appidentify && $(MAKE) clean
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo iqos_modules
+	cd $(MODULES_PATH)/qos-appidentify && cp appid.ko $(MODULE_TG_PATH)
+	
+	@echo "Making xt_app.ko"
+	cd $(MODULES_PATH)/xt_app && $(MAKE) clean
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo xt_app
+	cd $(MODULES_PATH)/xt_app && cp xt_app.ko $(MODULE_TG_PATH)	
+endif #INCLUDE_APP_IQOS
+####################################################
+#
+#Build libs
+#
+####################################################
+
+####################################################
+#
+#Build wireless, include driver and tools
+#
+####################################################
+sar:
+	@echo making sar
+	cd ../apps/public/sysstat-6.0.1/ && rm -f sysstat.cron.daily && rm -f sysstat.cron.hourly && $(MAKE) CC=$(TOOLPREFIX)gcc 
+	cd ../apps/public/sysstat-6.0.1/ && cp sar $(INSTALL_WIRELESS)/sbin
+	cd ../apps/public/sysstat-6.0.1/ && cp sadc $(INSTALL_WIRELESS)/sbin
+
+wpa2:wpa2_clean
+	@echo Making wpa2 at 'date'
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/wpa2 && $(MAKE) \
+		CC=$(TOOLPREFIX)gcc AR=$(TOOLPREFIX)ar LD=$(TOOLPREFIX)ld
+	@echo End Making wpa2 at 'date'
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/wpa2/common && \
+	$(STRIP) *.so && cp *.so $(INSTALL_WIRELESS)/lib
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/wpa2/hostapd && \
+	$(STRIP) hostapd && cp hostapd $(INSTALL_WIRELESS)/sbin
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/wpa2/wpa_supplicant && \
+	$(STRIP) wpa_supplicant && cp wpa_supplicant $(INSTALL_WIRELESS)/sbin
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/wpa2/wpatalk && \
+	$(STRIP) wpatalk && cp wpatalk $(INSTALL_WIRELESS)/sbin
+
+wpa2_clean:
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/wpa2 && $(MAKE) clean
+
+wlan_clean:wpa2_clean
+	cd $(HAL)/linux && make TARGET=$(TARGETARCH) clean
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/private/wlan/os/linux && $(MAKEARCH) TARGET=$(TARGETARCH) clean
+	make -C $(TOP_PATH)/$(SUPPLIER)/modules/art clean
+#	make -C $(TOP_PATH)/$(SUPPLIER)/modules/$(WIRELESSTOOLS) clean
+
+
+####################################################
+#
+#Build MTK 7610e Wireless Driver
+#
+####################################################
+
+
+	
+####################################################
+#
+#Build apps
+#
+####################################################
+
+#openssl should before pjsip case pjsip need it
+#libusb&libcompat should before handle_card&usb_modeswitch
+.PHONY: apps_build
+apps_build: public_apps_build private_apps_build vendor_apps_build
+
+####################################################
+#
+#Build private apps
+#
+####################################################
+
+.PHONY: private_apps_build
+private_apps_build: wolfssl cmm voip wirelesstool hotplug usbp handle_card
+	 
+.PHONY: vendor_apps_build
+vendor_apps_build:mtk_wl_tools
+
+#add start by frl for cloud_client, 2015-09-07
+.PHONY:wolfssl
+wolfssl:
+ifeq ($(INCLUDE_CLOUD), y)
+	cd $(PRIVATE_APPS_PATH)/wolfssl-3.4.6-commercial && \
+	./configure --prefix=$(PRIVATE_APPS_PATH)/wolfssl-3.4.6-commercial/install \
+				--build=i686-linux --host=$(HOST) \
+				--disable-dtls --disable-fastmath --disable-errorstrings\
+				--disable-chacha --disable-poly1305 --disable-examples \
+				CPPFLAGS="-DNO_WOLFSSL_SERVER -DNO_SESSION_CACHE " 
+	cd $(PRIVATE_APPS_PATH)/wolfssl-3.4.6-commercial && $(MAKE) install-strip
+endif
+#add end by frl
+
+.PHONY: cmm
+cmm:
+#	cd $(PRIVATE_APPS_PATH)/user/ && $(MAKE) apps_build xmode
+
+.PHONY: hotplug
+hotplug:
+ifeq ($(INCLUDE_USB_STORAGE), y)
+#	cd $(PRIVATE_APPS_PATH)/hotplug/ && $(MAKE)
+else
+
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+#	cd $(PRIVATE_APPS_PATH)/hotplug/ && $(MAKE)
+endif
+
+endif
+	
+.PHONY: usbp
+usbp:
+ifeq ($(INCLUDE_USB_STORAGE), y)
+#	cd $(PRIVATE_APPS_PATH)/usbp/ && $(MAKE)
+endif	
+
+.PHONY: wirelesstool
+wirelesstool:
+ifeq ($(INCLUDE_LAN_WLAN), y) 
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo wirelesstool
+else	#INCLUDE_LAN_WLAN
+	@echo no wifi
+endif	#INCLUDE_LAN_WLAN
+
+.PHONY: voip 
+voip:
+#ifneq ($(strip $(INCLUDE_VOIP)),)
+#	cd $(PRIVATE_APPS_PATH)/voip  && $(MAKE)
+#
+#ifeq ($(INCLUDE_DECT), y)
+#	if test -d "$(TOP_PATH)/$(SUPPLIER)/build_dir/target-mips_r2_uClibc-0.9.30.1_AC750/voip_dectcli/src"; then	\
+#	cd $(TOP_PATH)/$(SUPPLIER)/build_dir/target-mips_r2_uClibc-0.9.30.1_AC750/voip_dectcli/src && $(MAKE);	\
+#	fi
+#endif
+#else
+#	@echo no voip
+#endif
+
+.PHONY: handle_card
+handle_card:
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+#	@echo "Building handle_card"
+#	$(MAKE) -C $(PRIVATE_APPS_PATH)/handle_card
+else
+#	@echo no handle_card
+endif #INCLUDE_USB_3G_DONGLE
+
+.PHONY: mtk_eth_tools
+mtk_eth_tools: api_lib ethcmd api_cmd brctl
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo ethcmd
+
+.PHONY: mtk_wl_tools	
+mtk_wl_tools: 8021X
+#	cd $(TOP_PATH)/$(SUPPLIER)/apps/public/wireless_tools.29 &&  make realclean && make all
+
+.PHONY: ated
+ated:
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo ated_clean ated
+
+.PHONY: wscd
+wscd:
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo wscd_clean wscd
+
+.PHONY: api_lib
+api_lib:
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo api_lib_clean api_lib
+
+.PHONY:ethcmd
+ethcmd:
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo ethcmd_clean ethcmd
+
+.PHONY:api_cmd
+api_cmd:
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo api_cmd_clean api_cmd
+
+.PHONY:hw_nat
+hw_nat:
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo hw_nat_clean hw_nat
+
+.PHONY:8021X
+8021X:
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo 8021X_clean 8021X
+
+.PHONY:brctl
+brctl:
+#	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo brctl
+	
+####################################################
+#
+#Build public apps
+#
+####################################################
+
+.PHONY: public_apps_build
+public_apps_build: oslibs libusb libcompat openssl pjsip \
+					br2684ctl iproute2 iptables ebtables pppd ripd \
+					upnplib upnp flex radvd dhcpv6 samba ntfs-3g arpd \
+					usbip vsftp dlna ipsectools \
+					chat usb_modeswitch xl2tpd dropbear curl \
+					openvpn pptpd
+
+.PHONY:oslibs
+oslibs:
+	cd $(PUBLIC_APPS_PATH)/os_libs && $(MAKE)
+					
+.PHONY: busybox
+busybox:
+#	cd $(PUBLIC_APPS_PATH)/busybox-1.23.2 && $(MAKE)
+	
+.PHONY: iproute2
+iproute2:
+	cd $(PUBLIC_APPS_PATH)/iproute2-2.6.39 && $(MAKE)
+
+.PHONY: iptables
+iptables:
+	cd $(PUBLIC_APPS_PATH)/iptables-1.4.17 && test -e Makefile || ./configure --host=mips-linux-uclibc --enable-static --disable-shared  
+	cd $(PUBLIC_APPS_PATH)/iptables-1.4.17 && $(MAKE) AR=$(TOOLPREFIX)ar
+	$(STRIP) $(PUBLIC_APPS_PATH)/iptables-1.4.17/iptables/xtables-multi
+
+.PHONY: ebtables
+ebtables:
+	cd $(PUBLIC_APPS_PATH)/ebtables-v2.0.10-4 && $(MAKE) static
+	
+.PHONY: pppd
+pppd:
+ifeq ($(INCLUDE_PPTPVPN_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/ppp-2.4.5/pppd && $(MAKE) MPPE=y #INCLUDE_IPV6_PPPV6=$(INCLUDE_IPV6_PPPV6) 
+else
+	cd $(PUBLIC_APPS_PATH)/ppp-2.4.5/pppd && $(MAKE) #INCLUDE_IPV6_PPPV6=$(INCLUDE_IPV6_PPPV6)
+endif
+	
+.PHONY: br2684ctl
+br2684ctl:
+	cd $(PUBLIC_APPS_PATH)/br2684ctl && $(MAKE)
+	
+.PHONY: arpd
+arpd:
+	cd $(PUBLIC_APPS_PATH)/linux-atm && $(MAKE)
+	
+.PHONY: upnplib
+upnplib:
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/upnp_libs
+	
+.PHONY: upnp
+upnp:
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/IGD
+
+.PHONY: ripd
+ripd:
+ifeq ($(INCLUDE_RIP), y)
+#	$(MAKE) -C $(PUBLIC_APPS_PATH)/zebra-0.95a
+else
+	@echo no ripd
+endif
+
+.PHONY: pjsip
+pjsip:
+ifneq ($(strip $(INCLUDE_VOIP)),)
+ifneq ($(strip $(PJSIP_CONFCACHE_EXIST)),)
+#	cd $(PUBLIC_APPS_PATH)/pjsip_1.10 && $(MAKE)
+else
+#	cd $(PUBLIC_APPS_PATH)/pjsip_1.10 && ./configure --cache-file=./config_cache_file --srcdir=./ --prefix=$(TOOLROOTPATH) --exec-prefix=$(TOOLROOTPATH) --host=mipsel-linux --target=mipsel-linux --disable-speex-aec --disable-l16-codec --disable-gsm-codec --disable-speex-codec --disable-ilbc-codec --disable-g7221-codec --disable-ssl --disable-oss --disable-sound && $(MAKE)
+endif
+else
+	@echo no pjsip 
+endif
+
+.PHONY: usbip
+usbip:
+ifeq ($(INCLUDE_USB_OVER_IP_TPLINK), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/usbip-0.1.7 clean
+	cd $(PUBLIC_APPS_PATH)/usbip-0.1.7 && $(MAKE)
+endif
+
+.PHONY: vsftp
+vsftp:
+ifeq ($(INCLUDE_USB_FTP_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/vsftpd-2.3.2 && $(MAKE)
+else 
+	@echo no vsftp
+endif
+
+.PHONY: flex
+flex:
+ifeq ($(INCLUDE_IPV6), y)
+	cd $(PUBLIC_APPS_PATH)/flex-2.5.35 && test -e Makefile || ./configure --host=mips-linux 
+	cd $(PUBLIC_APPS_PATH)/flex-2.5.35 && $(MAKE)
+	mkdir -p $(PUBLIC_APPS_PATH)/lib
+	cp -p $(PUBLIC_APPS_PATH)/flex-2.5.35/libfl.a $(PUBLIC_APPS_PATH)/lib
+else 
+	@echo no ipv6 flex
+endif
+
+.PHONY: radvd
+radvd:
+ifeq ($(INCLUDE_IPV6), y)
+	cd $(PUBLIC_APPS_PATH)/radvd-1.5 && $(MAKE)
+else 
+	@echo no ipv6 radvd
+endif
+
+.PHONY: dhcpv6
+dhcpv6:
+ifeq ($(INCLUDE_IPV6), y)
+	cd $(PUBLIC_APPS_PATH)/wide-dhcpv6-20080615 && $(MAKE)
+else 
+	@echo no ipv6 dhcpv6
+endif
+
+.PHONY: ip
+ip: 
+ifeq ($(INCLUDE_IPV6), y)
+	cd $(PUBLIC_APPS_PATH)/iproute2-2.6.39 && $(MAKE)
+else
+	@echo no ipv6 ip
+endif
+
+#for samba and ntfs-3g, zjj, 20111129
+export HOST
+.PHONY: samba
+samba:
+ifeq ($(INCLUDE_USB_SAMBA_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/samba-3.6.25 && $(MAKE) samba
+else 
+	@echo no samba
+endif
+	
+.PHONY: ntfs-3g
+ntfs-3g:
+ifeq ($(INCLUDE_USB_STORAGE), y)
+	cd $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15 && test -e Makefile || ./configure --build=i686-linux --host=$(HOST) --disable-nfconv
+	cd $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15 && $(MAKE)
+	$(STRIP) $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15/libntfs-3g/.libs/libntfs-3g.so.83.0.0
+	$(STRIP) $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15/src/.libs/ntfs-3g
+	$(STRIP) $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15/src/.libs/lowntfs-3g
+else 
+	@echo no ntfs-3g+ntfsprogs
+endif
+#end by zjj
+
+#for mediaServer, modify by zengdongbiao, 21May15.
+export MEDIA_SERVER_PATH = $(PUBLIC_APPS_PATH)/media_server
+export MEDIA_SERVER_INSTALL=$(MEDIA_SERVER_PATH)/media_server_install
+.PHONY: dlna
+dlna: 
+ifeq ($(INCLUDE_USHARE), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/ffmpeg-0.6/
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/libdlna-0.2.3/
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/ushare-1.1a/
+endif
+ifeq ($(INCLUDE_MINIDLNA), y)
+	cd $(PUBLIC_APPS_PATH)/media_server && $(MAKE) media_share 
+	find $(MEDIA_SERVER_INSTALL)/lib -name "*.so*" -type f | xargs $(STRIP) --strip-unneeded
+endif
+ifeq ($(INCLUDE_LITE_MINIDLNA), y)
+	cd $(PUBLIC_APPS_PATH)/media_server && $(MAKE) lite_media_share 
+endif
+#end modify by zengdongbiao
+
+.PHONY: openssl openssl_clean
+openssl:
+	# old openssl versioon 0.9.8
+ifeq ($(INCLUDE_SSL), y)
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh && test -e Makefile || ./Configure shared \
+		no-threads no-zlib no-asm no-gmp no-krb5 no-hw no-cipher no-rfc3779 no-sse2 no-speed \
+		no-md2 no-md4 no-mdc2 no-ripemd no-rc5 no-idea no-bf no-cast no-camellia no-ssl2 no-ssl3 \
+		no-ecdsa linux-generic32 --prefix=$(PUBLIC_APPS_PATH)/openssl-0.9.8zh/install \
+	&& sed -i 's/-O3/-Os -DGNU/g' Makefile
+	
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh \
+    && $(MAKE) CC=$(CC) LD=$(LD) SHARED_LDFLAGS="-s" install \
+	&& mkdir -p ./lib \
+	&& cp -p ./libcrypto.so.0.9.8 ./lib/ \
+	&& cp -p ./libssl.so.0.9.8 ./lib/ \
+	&& cd ./lib/ \
+	&& ln -sf libcrypto.so.0.9.8 libcrypto.so.0 \
+	&& ln -sf libcrypto.so.0.9.8 libcrypto.so \
+	&& ln -sf libssl.so.0.9.8 libssl.so.0 \
+	&& ln -sf libssl.so.0.9.8 libssl.so
+	$(STRIP) $(PUBLIC_APPS_PATH)/openssl-0.9.8zh/install/bin/openssl
+else
+ifeq ($(INCLUDE_LOGIN_GDPR_ENCRYPT), y)
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh && test -e Makefile || ./Configure -fPIC no-shared \
+		no-threads no-zlib no-asm no-gmp no-krb5 no-hw no-cipher no-rfc3779 no-sse2 no-speed \
+		no-md2 no-md4 no-mdc2 no-ripemd no-rc5 no-idea no-bf no-cast no-camellia \
+		no-ec no-dsa no-ecdsa no-store linux-mips \
+	&& sed -i 's/-O3/-Os -DGNU/g' Makefile
+	
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh \
+	&& $(MAKE) CC=$(CC) LD=$(LD)\
+	&& cp -p ./libcrypto.a $(SLIB_PATH)/../usr/lib/
+endif
+endif
+
+	# new opsnssl version 1.1.1f
+	cd $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME) && test -e Makefile || ./Configure shared \
+		no-afalgeng no-aria no-asan no-asm no-async enable-bf no-blake2 no-camellia \
+		no-capieng enable-cast no-chacha no-cmac no-cms no-comp no-crypto-mdebug no-ct \
+		enable-des no-devcryptoeng enable-dsa no-dso enable-ec \
+		no-ec2m no-ecdh no-ecdsa no-egd enable-engine no-err no-external-tests no-gost \
+		no-hw no-idea no-md2 no-mdc2 no-msan no-multiblock no-nextprotoneg \
+		no-pinshared no-ocb no-poly1305 no-posix-io no-psk \
+		enable-rc4 no-rc5 no-rdrand no-rfc3779 no-rmd160 no-scrypt no-sctp \
+		no-seed no-siphash no-sm2 no-sm3 no-sm4 no-srp no-srtp no-sse2 \
+		no-tests no-ts no-ubsan no-unit-test no-whirlpool no-zlib \
+		enable-ssl3 enable-ssl3-method enable-ssl-trace enable-weak-ssl-ciphers \
+		linux-generic32 --prefix=$(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME)/install
+
+	cd $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME) \
+		&& $(MAKE) CROSS_COMPILE= CC=$(CC) LD=$(LD) SHARED_LDFLAGS="-s" depend install_sw
+
+openssl_clean:
+	# clean for openssl 1.1.1f
+ifeq ($(include_ssl), y)
+	-cd $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME) && test -e Makefile && $(MAKE) clean  && rm -f Makefile
+	-cd $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME) && rm -rf ./install
+endif
+
+.PHONY: ipsectools
+ipsectools:
+ifeq ($(INCLUDE_IPSEC), y)
+	cd $(PUBLIC_APPS_PATH)/ipsectools && test -e Makefile || ./configure --host=mips-linux --with-kernel-headers=$(KERNELPATH)/include \
+	--with-openssl=$(PUBLIC_APPS_PATH)/openssl-0.9.8zh/ --enable-security-context=no --enable-shared=yes --enable-adminport=yes \
+	--enable-dpd=yes CFLAGS="-Os -DGNU" 
+	cd $(PUBLIC_APPS_PATH)/ipsectools && $(MAKE)
+	$(STRIP) $(PUBLIC_APPS_PATH)/ipsectools/src/racoon/.libs/racoon
+	$(STRIP) $(PUBLIC_APPS_PATH)/ipsectools/src/setkey/.libs/setkey
+	$(STRIP) $(PUBLIC_APPS_PATH)/ipsectools/src/racoon/.libs/libracoon.so.0.0.0
+	$(STRIP) $(PUBLIC_APPS_PATH)/ipsectools/src/libipsec/.libs/libipsec.so.0.0.1
+endif
+
+##### added by CCy for vpn, 20150630  #####
+.PHONY: lzo
+lzo:
+ifeq ($(INCLUDE_OPENVPN_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/lzo-2.09 && test -e Makefile || ./configure --host=$(HOST) --prefix=$(PUBLIC_APPS_PATH)/lzo-2.09/install --enable-shared
+	cd $(PUBLIC_APPS_PATH)/lzo-2.09 && $(MAKE) install-strip
+endif
+	
+.PHONY: openvpn
+openvpn: lzo
+ifeq ($(INCLUDE_OPENVPN_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/openvpn-2.3.6 && test -e Makefile || ./configure --host=$(HOST) --prefix=$(PUBLIC_APPS_PATH)/openvpn-2.3.6/install \
+		IFCONFIG=/sbin/ifconfig ROUTE=/sbin/route IPROUTE=/usr/bin/ip NETSTAT=/bin/netstat \
+		--enable-small --disable-selinux --disable-systemd --disable-plugins --disable-debug --disable-eurephia --disable-pkcs11 --enable-password-save --enable-management \
+		--enable-lzo --disable-x509-alt-username-ssl --enable-fragment --disable-iproute2 --enable-pf --enable-ssl --enable-crypto --with-crypto-library=openssl \
+		OPENSSL_CRYPTO_CFLAGS=-I$(PUBLIC_APPS_PATH)/openssl-0.9.8zh/install/include OPENSSL_CRYPTO_LIBS="-L$(PUBLIC_APPS_PATH)/openssl-0.9.8zh/install/lib -lcrypto" \
+		OPENSSL_SSL_CFLAGS=-I$(PUBLIC_APPS_PATH)/openssl-0.9.8zh/install/include OPENSSL_SSL_LIBS="-L$(PUBLIC_APPS_PATH)/openssl-0.9.8zh/install/lib -lssl" \
+		LZO_CFLAGS=-I$(PUBLIC_APPS_PATH)/lzo-2.09/install/include LZO_LIBS="-L$(PUBLIC_APPS_PATH)/lzo-2.09/install/lib -llzo2"
+	cd $(PUBLIC_APPS_PATH)/openvpn-2.3.6 && $(MAKE) install-strip
+endif
+
+##### added by CCy for vpn, 20150630  #####
+#because --sbindir is used for program when running, do not define --prefix and do not $(MAKE) install,
+# or else install will install in the wrong directory.
+.PHONY: pptpd
+pptpd:
+ifeq ($(INCLUDE_PPTPVPN_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/pptpd-1.4.0 && test -e Makefile || ./configure --host=$(HOST) \
+		ac_cv_header_libintl_h=no --sbindir=/usr/sbin --enable-bcrelay
+	cd $(PUBLIC_APPS_PATH)/pptpd-1.4.0 && $(MAKE)
+endif
+###########################################
+
+.PHONY: chat
+chat:
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+	@echo building chat...
+	cd $(PUBLIC_APPS_PATH)/ppp-2.4.5/chat && $(MAKE)
+	$(STRIP) $(PUBLIC_APPS_PATH)/ppp-2.4.5/chat/chat
+else
+	@echo no chat
+endif
+
+.PHONY: libusb
+libusb:
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+	echo "Building usb library"
+#	cd $(PUBLIC_APPS_PATH)/libusb-1.0.8 && test -e Makefile || ./configure --build=i686-linux --host=$(HOST) --prefix=$(PUBLIC_APPS_PATH)/libusb-1.0.8/install
+#	cd $(PUBLIC_APPS_PATH)/libusb-1.0.8 && $(MAKE) install
+else
+	@echo no libusb
+endif
+
+.PHONY: libcompat
+libcompat:
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+	echo "Building usb compat"
+#	cd $(PUBLIC_APPS_PATH)/libusb-compat-0.1.3 && test -e Makefile || ./configure --build=i686-linux --host=$(HOST) --prefix=$(PUBLIC_APPS_PATH)/libusb-compat-0.1.3/install LIBUSB_1_0_CFLAGS=-I$(PUBLIC_APPS_PATH)/libusb-1.0.8/install/include/libusb-1.0 LIBUSB_1_0_LIBS=-L$(PUBLIC_APPS_PATH)/libusb-1.0.8/install/lib\ -lusb-1.0
+#	cd $(PUBLIC_APPS_PATH)/libusb-compat-0.1.3 && $(MAKE) install
+else
+	@echo no libcompat
+endif
+
+.PHONY: usb_modeswitch
+usb_modeswitch:
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+	echo "Building usb_modeswitch"
+#	cd $(PUBLIC_APPS_PATH)/usb-modeswitch-1.2.3 && $(MAKE)
+#	$(STRIP) $(PUBLIC_APPS_PATH)/usb-modeswitch-1.2.3/usb_modeswitch
+else
+	@echo no usb_modeswitch
+endif
+
+.PHONY: xl2tpd
+xl2tpd:
+ifeq ($(INCLUDE_L2TP), y)
+	cd $(PUBLIC_APPS_PATH)/xl2tpd-1.1.12 && $(MAKE)
+endif
+
+.PHONY: dropbear
+dropbear:
+ifeq ($(INCLUDE_PORTABLE_APP), y)
+	cd $(PUBLIC_APPS_PATH)/dropbear && $(MAKE) MULTI=1 SCPPROGRESS=1
+else ifeq ($(INCLUDE_SSH_ACCESS), y)
+	cd $(PUBLIC_APPS_PATH)/dropbear && $(MAKE) MULTI=1 SCPPROGRESS=1
+else
+	@echo no dropbear
+endif
+
+#add start by frl for cloud_client, 2015-09-07
+.PHONY:curl
+curl:
+ifeq ($(INCLUDE_CLOUD), y)
+	cd $(PUBLIC_APPS_PATH)/curl-7.29.0 && test -e Makefile || \
+	./configure --prefix=$(PUBLIC_APPS_PATH)/curl-7.29.0/install \
+				--build=i686-linux --host=$(HOST) \
+				--disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict \
+				--disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smtp --disable-gopher \
+				--disable-ipv6 --disable-sspi --disable-crypto-auth --disable-ntlm-wb --disable-tls-srp \
+				--disable-cookies --disable-soname-bump \
+				--without-ssl
+	cd $(PUBLIC_APPS_PATH)/curl-7.29.0 && $(MAKE) install-strip
+endif
+
+#add end by frl
+####################################################
+#
+#Build filesystem, prepare basic fs first
+#
+####################################################
+.PHONY: fs_build
+fs_build: fs_clean fs_create fs_lib fs_dev fs_bin fs_modules fs_sysfiles fs_rootfs
+
+fs_clean:
+	rm -rf $(MODEL_FS_PATH)/../rootfs.$(MODEL)
+	rm -rf $(MODEL_FS_PATH)
+	rm -f $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL).xml \
+		$(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml \
+		$(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml \
+		$(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml 
+	
+fakeroot_clean:    
+	if [ -e $(FAKEROOT_PATH)/Makefile ];  then make -C $(FAKEROOT_PATH) distclean; fi
+	rm -f $(FAKEROOT_PATH)/fakeroot
+	rm -f $(FAKEROOT_PATH)/.configured
+	
+.PHONY: fs_create
+fs_create: 
+	cp -pR $(TOP_PATH)/targets/fs.dir $(MODEL_FS_PATH)
+	find  $(MODEL_FS_PATH) -name ".svn" | xargs rm -rf
+ifneq ($(INCLUDE_CWMP_SSL_VERIFY_PEER), y)
+	@rm -fr $(MODEL_FS_PATH)/etc/cert
+endif
+
+	#for rcS, yuanshang, 20111026
+	rm -fr $(MODEL_FS_PATH)/etc/init.d/*
+	cp $(TOP_PATH)/targets/fs.dir/etc/init.d/rcS_$(MODEL) $(MODEL_FS_PATH)/etc/init.d/rcS
+	chmod 755 $(MODEL_FS_PATH)/etc/init.d/rcS
+
+	#Add by Zhao Mengqing, for led.conf, 2016-5-18 
+	rm -f $(MODEL_FS_PATH)/etc/led.conf_*
+	#cp $(TOP_PATH)/targets/fs.dir/etc/led.conf_$(MODEL) $(MODEL_FS_PATH)/etc/led.conf
+	#endadd 
+
+ifeq ($(INCLUDE_SSH_ACCESS), y)
+	cp $(TOP_PATH)/targets/fs.dir/etc/shells $(MODEL_FS_PATH)/etc/shells
+endif
+	
+ifneq ($(INCLUDE_VOIP), y)
+	@rm -fr $(MODEL_FS_PATH)/etc/voiceNotify
+endif	
+
+.PHONY: fs_lib
+fs_lib:
+	cp -P $(SLIB_PATH)/*.so* $(MODEL_FS_PATH)/lib/
+#	cp -P $(PRIVATE_LIB_BIN_PATH)/* $(MODEL_FS_PATH)/lib/
+	cp -P $(PUBLIC_APPS_PATH)/upnp_libs/*.so $(MODEL_FS_PATH)/lib/
+	cp -P $(OS_LIB_PATH)/libos.so $(MODEL_FS_PATH)/lib
+
+#	cp -P $(TOP_PATH)/$(SUPPLIER)/apps/private/lib/libapi_lib_qdmamgr_lan.so.*	$(MODEL_FS_PATH)/lib
+#	cp -P $(TOP_PATH)/$(SUPPLIER)/apps/private/lib/libapi_lib_qdmamgr_wan.so.*	$(MODEL_FS_PATH)/lib
+#	cp -P $(TOP_PATH)/$(SUPPLIER)/apps/private/lib/libcompileoption.so.*	$(MODEL_FS_PATH)/lib
+#	cp -P $(TOP_PATH)/$(SUPPLIER)/apps/private/lib/libapi_lib_utility.so.*	$(MODEL_FS_PATH)/lib
+#	cp -P $(TOP_PATH)/$(SUPPLIER)/apps/private/lib/libmtkswitch.so.1.0	$(MODEL_FS_PATH)/lib
+#	cp -P $(TOP_PATH)/$(SUPPLIER)/apps/private/lib/libapi_lib_ppe.so.*	$(MODEL_FS_PATH)/lib
+
+ifeq ($(INCLUDE_SSL), y)
+	#for openssl-0.9.8
+	cp -p $(PUBLIC_APPS_PATH)/openssl-0.9.8zh/libcrypto.so.0.9.8 $(MODEL_FS_PATH)/lib/
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libcrypto.so.0.9.8 libcrypto.so
+	cp -p $(PUBLIC_APPS_PATH)/openssl-0.9.8zh/libssl.so.0.9.8 $(MODEL_FS_PATH)/lib/
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libssl.so.0.9.8 libssl.so
+
+	#for new openssl
+	cp -pd $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME)/install/bin/openssl $(MODEL_FS_PATH)/usr/sbin
+	cp -pd $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME)/install/lib/libcrypto.so* $(MODEL_FS_PATH)/lib/
+	cp -pd $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME)/install/lib/libssl.so* $(MODEL_FS_PATH)/lib/
+	$(info copy $(PUBLIC_APPS_PATH)/$(INCLUDE_SSL_LIB_NAME)/install/lib/ to $(MODEL_FS_PATH)/lib )
+endif
+	
+ifneq ($(strip $(INCLUDE_USB_VOICEMAIL)),)
+#	cp $(APP_PJSIP_DIR)/usbvm/lib/libusbvmcommon.so $(MODEL_FS_PATH)/lib/
+endif
+
+	#for the libs of ntfs-3g, zjj, 20111129
+ifeq ($(INCLUDE_USB_STORAGE), y)
+	cp -p $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15/libntfs-3g/.libs/libntfs-3g.so.83.0.0 $(MODEL_FS_PATH)/lib/
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libntfs-3g.so.83.0.0 libntfs-3g.so.83
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libntfs-3g.so.83.0.0 libntfs-3g.so
+endif
+	#end by zjj
+ 
+ifeq ($(INCLUDE_USB_3G_DONGLE),y)
+#	cp --no-dereference -p $(PUBLIC_APPS_PATH)/libusb-1.0.8/install/lib/libusb-1.0.so* $(MODEL_FS_PATH)/lib/
+#	cp --no-dereference -p $(PUBLIC_APPS_PATH)/libusb-compat-0.1.3/install/lib/libusb-0.1.so* $(MODEL_FS_PATH)/lib/
+#	cp --no-dereference -p $(PUBLIC_APPS_PATH)/libusb-compat-0.1.3/install/lib/libusb.so $(MODEL_FS_PATH)/lib/
+endif #INCLUDE_USB_3G_DONGLE
+ 
+ifeq ($(INCLUDE_IPSEC), y)	
+	cp -p $(PUBLIC_APPS_PATH)/ipsectools/src/racoon/.libs/libracoon.so.0.0.0 $(MODEL_FS_PATH)/lib/
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libracoon.so.0.0.0 libracoon.so.0
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libracoon.so.0.0.0 libracoon.so
+	cp -p $(PUBLIC_APPS_PATH)/ipsectools/src/libipsec/.libs/libipsec.so.0.0.1 $(MODEL_FS_PATH)/lib/
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libipsec.so.0.0.1 libipsec.so.0
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libipsec.so.0.0.1 libipsec.so
+endif
+ 
+#added by zengdongbiao for minidlna, in 21May15.
+ifeq ($(INCLUDE_MINIDLNA), y)
+ ###copy media server related libs
+	cp $(MEDIA_SERVER_INSTALL)/lib/libjpeg.so.9.0.0 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libid3tag.so.0.3.0 $(MODEL_FS_PATH)/lib
+#	cp $(MEDIA_SERVER_INSTALL)/lib/libsqlite3.so.0.8.6 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libavformat.so.56.15.102 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libavutil.so.54.15.100 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libavcodec.so.56.13.100 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libavdevice.so.56.3.100 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libexif.so.12.3.3 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libFLAC.so.8.2.0 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libogg.so.0.6.0 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libvorbis.so.0.4.3 $(MODEL_FS_PATH)/lib
+#	cp $(MEDIA_SERVER_INSTALL)/lib/libiconv.so.2.5.1 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libswscale.so.3.1.101 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libtiff.so.5.2.0 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libtiffxx.so.5.2.0 $(MODEL_FS_PATH)/lib
+	cp $(MEDIA_SERVER_INSTALL)/lib/libz.so.1.2.6 $(MODEL_FS_PATH)/lib
+###link media_server related libs
+	cd $(MODEL_FS_PATH)/lib;
+	pwd
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libjpeg.so.9.0.0 libjpeg.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libjpeg.so.9.0.0 libjpeg.so.9
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libid3tag.so.0.3.0 libid3tag.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libid3tag.so.0.3.0 libid3tag.so.0
+#	cd $(MODEL_FS_PATH)/lib/ && ln -sf libsqlite3.so.0.8.6 libsqlite3.so
+#	cd $(MODEL_FS_PATH)/lib/ && ln -sf libsqlite3.so.0.8.6 libsqlite3.so.0
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavformat.so.56.15.102 libavformat.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavformat.so.56.15.102 libavformat.so.56
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavutil.so.54.15.100 libavutil.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavutil.so.54.15.100 libavutil.so.54
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavcodec.so.56.13.100 libavcodec.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavcodec.so.56.13.100 libavcodec.so.56
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavdevice.so.56.3.100 libavdevice.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libavdevice.so.56.3.100 libavdevice.so.56
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libexif.so.12.3.3 libexif.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libexif.so.12.3.3 libexif.so.12
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libFLAC.so.8.2.0 libFLAC.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libFLAC.so.8.2.0 libFLAC.so.8
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libogg.so.0.6.0 libogg.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libogg.so.0.6.0 libogg.so.0
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libvorbis.so.0.4.3 libvorbis.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libvorbis.so.0.4.3 libvorbis.so.0
+#	cd $(MODEL_FS_PATH)/lib/ && ln -sf libiconv.so.2.5.1 libiconv.so
+#	cd $(MODEL_FS_PATH)/lib/ && ln -sf libiconv.so.2.5.1 libiconv.so.2
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libswscale.so.3.1.101 libswscale.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libswscale.so.3.1.101 libswscale.so.3
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libz.so.1.2.6 libz.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libz.so.1.2.6 libz.so.1
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libtiff.so.5.2.0 libtiff.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libtiff.so.5.2.0 libtiff.so.5
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libtiffxx.so.5.2.0 libtiffxx.so
+	cd $(MODEL_FS_PATH)/lib/ && ln -sf libtiffxx.so.5.2.0 libtiffxx.so.5
+endif
+#end added by zengdongbiao
+ 
+#add by fang ruilong
+ifeq ($(INCLUDE_CLOUD), y)
+	cp -p $(PUBLIC_APPS_PATH)/curl-7.29.0/install/lib/*.so* $(MODEL_FS_PATH)/lib/
+endif
+#add end
+
+	cp -P $(TOP_PATH)/$(SUPPLIER)/apps/public/wireless_tools.29/libiw.so.29 $(MODEL_FS_PATH)/lib
+
+.PHONY: fs_dev
+fs_dev:
+#	$(TOOLS_PATH)/makedevlinks $(MODEL_FS_PATH)/	
+
+
+.PHONY:fs_bin
+fs_bin:
+#	cp $(PRIVATE_APPS_BIN_PATH)/* $(MODEL_FS_PATH)/usr/bin
+	
+#	cd $(PUBLIC_APPS_PATH)/busybox-1.23.2 && $(MAKE) install CONFIG_PREFIX=$(MODEL_FS_PATH)
+	cp -p $(PUBLIC_APPS_PATH)/iproute2-2.6.39/tc/tc $(MODEL_FS_PATH)/usr/bin
+	
+	cp -p $(PUBLIC_APPS_PATH)/iptables-1.4.17/iptables/xtables-multi $(MODEL_FS_PATH)/usr/bin
+	cd $(MODEL_FS_PATH)/usr/bin && ln -sf xtables-multi iptables
+	test -d $(TOOLS_FS_PATH) || mkdir -p $(TOOLS_FS_PATH)
+	-cp -p $(TOOLS_FS_PATH)/* $(MODEL_FS_PATH)/usr/bin
+		
+ifeq ($(INCLUDE_IPV6), y)
+	cd $(MODEL_FS_PATH)/usr/bin && ln -sf xtables-multi ip6tables
+endif
+	cp -p $(PUBLIC_APPS_PATH)/br2684ctl/br2684ctl $(MODEL_FS_PATH)/usr/bin 
+
+	cp -p $(PUBLIC_APPS_PATH)/ppp-2.4.5/pppd/pppd $(MODEL_FS_PATH)/usr/sbin
+	cp -p $(PUBLIC_APPS_PATH)/ebtables-v2.0.10-4/ebtables $(MODEL_FS_PATH)/usr/bin
+	cp -p $(PUBLIC_APPS_PATH)/IGD/upnpd $(MODEL_FS_PATH)/usr/bin
+	cp -p $(PUBLIC_APPS_PATH)/linux-atm/arpd/atmarp $(MODEL_FS_PATH)/usr/sbin
+	cp -p $(PUBLIC_APPS_PATH)/linux-atm/arpd/atmarpd $(MODEL_FS_PATH)/usr/sbin
+	
+ifeq ($(INCLUDE_PORTABLE_APP), y)		
+	cp -p $(PUBLIC_APPS_PATH)/dropbear/dropbearmulti $(MODEL_FS_PATH)/usr/bin
+	cd $(MODEL_FS_PATH)/usr/bin && ln -s dropbearmulti dropbear
+	cd $(MODEL_FS_PATH)/usr/bin && ln -s dropbearmulti dropbearkey
+	cd $(MODEL_FS_PATH)/usr/bin && ln -s dropbearmulti scp
+else ifeq ($(INCLUDE_SSH_ACCESS), y)
+	cp -p $(PUBLIC_APPS_PATH)/dropbear/dropbearmulti $(MODEL_FS_PATH)/usr/bin
+	cd $(MODEL_FS_PATH)/usr/bin && ln -s dropbearmulti dropbear
+	cd $(MODEL_FS_PATH)/usr/bin && ln -s dropbearmulti dropbearkey
+	cd $(MODEL_FS_PATH)/usr/bin && ln -s dropbearmulti scp
+endif
+	
+ifeq ($(INCLUDE_L2TP), y)
+	cp -p $(PUBLIC_APPS_PATH)/xl2tpd-1.1.12/xl2tpd $(MODEL_FS_PATH)/usr/sbin
+endif
+
+ifeq ($(INCLUDE_USB_OVER_IP_TPLINK), y)
+	cp -p $(PUBLIC_APPS_PATH)/usbip-0.1.7/usbipd $(MODEL_FS_PATH)/usr/bin
+endif
+
+ifeq ($(INCLUDE_USB_FTP_SERVER), y)
+	cp -p $(PUBLIC_APPS_PATH)/vsftpd-2.3.2/vsftpd $(MODEL_FS_PATH)/usr/bin
+	cp -p $(PUBLIC_APPS_PATH)/vsftpd-2.3.2/vsftpd.conf $(MODEL_FS_PATH)/etc
+	cp -p $(PUBLIC_APPS_PATH)/vsftpd-2.3.2/passwd $(MODEL_FS_PATH)/etc/vsftpd_passwd
+endif
+	
+ifeq ($(INCLUDE_RIP), y)
+#	cp -p $(PUBLIC_APPS_PATH)/zebra-0.95a/ripd/ripd $(MODEL_FS_PATH)/usr/sbin
+#	cp -p $(PUBLIC_APPS_PATH)/zebra-0.95a/zebra/zebra $(MODEL_FS_PATH)/usr/sbin
+endif
+
+ifneq ($(strip $(INCLUDE_VOIP)),)
+#	cp $(APP_VOIP_DIR)/bin/$(MODEL)/* $(MODEL_FS_PATH)/usr/bin
+#	cp $(APP_PJSIP_DIR)/pjsip-apps/bin/pjsua $(MODEL_FS_PATH)/usr/bin
+ifeq ($(INCLUDE_DECT), y)
+	cp $(TOP_PATH)/$(SUPPLIER)/build_dir/target-mips_r2_uClibc-0.9.30.1_AC750/voip_dectcli/bin/Dectcli $(MODEL_FS_PATH)/usr/bin
+endif
+endif	
+
+ifeq ($(INCLUDE_IPV6), y)
+	cp -p $(PUBLIC_APPS_PATH)/radvd-1.5/radvd $(MODEL_FS_PATH)/usr/sbin
+endif
+
+ifeq ($(INCLUDE_IPV6), y)
+	cp -p $(PUBLIC_APPS_PATH)/wide-dhcpv6-20080615/dhcp6s $(MODEL_FS_PATH)/usr/sbin
+	cp -p $(PUBLIC_APPS_PATH)/wide-dhcpv6-20080615/dhcp6c $(MODEL_FS_PATH)/usr/sbin
+endif	
+	
+ifeq ($(INCLUDE_IPV6), y)
+	cp -p $(PUBLIC_APPS_PATH)/iproute2-2.6.39/ip/ip $(MODEL_FS_PATH)/usr/bin
+endif	
+	
+ifeq ($(INCLUDE_USB_STORAGE),y)
+	#for the bins of hotplug, zjj, 20111129
+#	cp $(PRIVATE_APPS_PATH)/usbp/usbp $(MODEL_FS_PATH)/sbin
+#	cp $(PRIVATE_APPS_PATH)/hotplug/hotplug $(MODEL_FS_PATH)/sbin
+	#end by zjj
+	#for the bins of samba and ntfs-3g, zjj, 20111129
+	cp -p $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15/src/.libs/ntfs-3g $(MODEL_FS_PATH)/usr/bin/ntfs-3g
+ifeq ($(INCLUDE_USB_SAMBA_SERVER), y)
+	cp -p $(PUBLIC_APPS_PATH)/samba-3.6.25/source3/bin/samba_multicall $(MODEL_FS_PATH)/usr/bin
+	cd $(MODEL_FS_PATH)/usr/bin/ && ln -sf samba_multicall $(MODEL_FS_PATH)/usr/bin/smbd
+	cd $(MODEL_FS_PATH)/usr/bin/ && ln -sf samba_multicall $(MODEL_FS_PATH)/usr/bin/nmbd
+	cd $(MODEL_FS_PATH)/usr/bin/ && ln -sf samba_multicall $(MODEL_FS_PATH)/usr/bin/smbpasswd
+	cd $(MODEL_FS_PATH)/usr/bin/ && ln -sf samba_multicall $(MODEL_FS_PATH)/usr/bin/smbcontrol
+endif #INCLUDE_USB_SAMBA_SERVER
+	#end by zjj
+
+#for mediaServer, modify by zengdongbiao, 21May15.
+ifeq ($(INCLUDE_USB_MEDIA_SERVER), y)
+ifeq ($(INCLUDE_USHARE), y)
+	cp -p $(PUBLIC_APPS_PATH)/ushare-1.1a/src/ushare $(MODEL_FS_PATH)/usr/bin
+	cp -p $(PUBLIC_APPS_PATH)/ushare-1.1a/scripts/ushare.conf $(MODEL_FS_PATH)/etc/ushare.conf
+else
+	cp -p $(MEDIA_SERVER_INSTALL)/sbin/minidlnad $(MODEL_FS_PATH)/usr/sbin
+	cp -p $(MEDIA_SERVER_PATH)/minidlna-1.1.4/minidlna.conf $(MODEL_FS_PATH)/etc
+endif #INCLUDE_USHARE
+endif #INCLUDE_USB_MEDIA_SERVER
+#end modify by zengdongbiao
+
+else
+ifeq ($(INCLUDE_USB_3G_DONGLE),y)
+#	cp $(PRIVATE_APPS_PATH)/hotplug/hotplug $(MODEL_FS_PATH)/sbin
+endif #INCLUDE_USB_3G_DONGLE
+endif #INCLUDE_USB_STORAGE
+	
+ifeq ($(INCLUDE_USB_3G_DONGLE),y)
+#	cp $(PRIVATE_APPS_PATH)/handle_card/modswitch_conf/support_3g_list $(MODEL_FS_PATH)/etc
+#	cp $(PUBLIC_APPS_PATH)/usb-modeswitch-1.2.3/usb_modeswitch $(MODEL_FS_PATH)/usr/bin
+#	cp $(PUBLIC_APPS_PATH)/ppp-2.4.5/chat/chat $(MODEL_FS_PATH)/usr/bin
+#	cp -pR $(PRIVATE_APPS_PATH)/handle_card/source/handle_card $(MODEL_FS_PATH)/usr/sbin/
+#	cp -pR $(PRIVATE_APPS_PATH)/handle_card/modem_scan/modem_scan $(MODEL_FS_PATH)/usr/sbin/
+#	cp -pR $(PRIVATE_APPS_PATH)/handle_card/chat_script/* $(MODEL_FS_PATH)/etc/ppp/
+#	cp -pR $(PRIVATE_APPS_PATH)/handle_card/modswitch_conf/mode_switch.conf.bin $(MODEL_FS_PATH)/etc/
+endif #INCLUDE_USB_3G_DONGLE
+	
+ifeq ($(INCLUDE_IPSEC),y)
+	cp -p $(PUBLIC_APPS_PATH)/ipsectools/src/racoon/.libs/racoon $(MODEL_FS_PATH)/usr/bin
+	cp -p $(PUBLIC_APPS_PATH)/ipsectools/src/setkey/.libs/setkey $(MODEL_FS_PATH)/usr/bin
+	cp -p $(PUBLIC_APPS_PATH)/ipsectools/src/racoon/.libs/racoonctl $(MODEL_FS_PATH)/usr/bin
+	#copy ipsecVpn in user cmm Makefile
+	#cp -p $(PRIVATE_APPS_PATH)/user/ipsecVpn/ipsecVpn $(MODEL_FS_PATH)/usr/sbin
+endif
+
+###### added by CCy for vpn ########
+ifeq ($(INCLUDE_OPENVPN_SERVER), y)
+	cp -p $(PUBLIC_APPS_PATH)/lzo-2.09/install/lib/*.so* $(MODEL_FS_PATH)/lib/
+endif
+
+ifeq ($(INCLUDE_OPENVPN_SERVER), y)
+	cp -p $(PUBLIC_APPS_PATH)/openssl-0.9.8zh/install/bin/openssl $(MODEL_FS_PATH)/usr/sbin
+	cp -pr $(PUBLIC_APPS_PATH)/openvpn-2.3.6/easy-rsa $(MODEL_FS_PATH)/etc
+	cp -p $(PUBLIC_APPS_PATH)/openvpn-2.3.6/install/sbin/openvpn $(MODEL_FS_PATH)/usr/sbin
+	cd $(MODEL_FS_PATH) && ln -sf /var/tmp/.rnd ./etc/.rnd
+endif
+
+ifeq ($(INCLUDE_PPTPVPN_SERVER), y)
+	cp -p $(PUBLIC_APPS_PATH)/pptpd-1.4.0/bcrelay $(MODEL_FS_PATH)/usr/sbin
+	cp -p $(PUBLIC_APPS_PATH)/pptpd-1.4.0/pptpctrl $(MODEL_FS_PATH)/usr/sbin
+	cp -p $(PUBLIC_APPS_PATH)/pptpd-1.4.0/pptpd $(MODEL_FS_PATH)/usr/sbin
+	cp -p $(PUBLIC_APPS_PATH)/pptpd-1.4.0/config/options.pptpd $(MODEL_FS_PATH)/etc/ppp
+	cd $(MODEL_FS_PATH) && ln -sf /var/pptpd/chap-secrets ./etc/ppp/chap-secrets
+endif
+###### add ended #########################
+
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/private/tcci/tcci $(MODEL_FS_PATH)/usr/bin
+#	rm -f $(MODEL_FS_PATH)/usr/bin/tce
+#	ln -s tcci $(MODEL_FS_PATH)/usr/bin/tce
+#	rm -f $(MODEL_FS_PATH)/usr/bin/sys
+#	ln -s tcci $(MODEL_FS_PATH)/usr/bin/sys
+#	rm -f $(MODEL_FS_PATH)/usr/bin/wan
+#	ln -s tcci $(MODEL_FS_PATH)/usr/bin/wan
+#	rm -f $(MODEL_FS_PATH)/usr/bin/w
+#	ln -s tcci $(MODEL_FS_PATH)/usr/bin/w
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/binary/$(CPU_TYPE)/hw_nat $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/private/API/cmd/qdma/qdmamgr_lan $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/private/API/cmd/qdma/qdmamgr_wan $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/filesystem/userfs/bin/ethphxcmd $(MODEL_FS_PATH)/usr/bin
+	
+ifeq ($(INCLUDE_LAN_WLAN), y) 
+#	cp $(TOP_PATH)/$(SUPPLIER)/filesystem/usr/etc/RT30xxEEPROM.bin $(MODEL_FS_PATH)/etc
+#	cp $(TOP_PATH)/$(SUPPLIER)/filesystem/userfs/bin/iwpriv $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/filesystem/lib/libiw.so.28 $(MODEL_FS_PATH)/lib
+#	cp $(TOP_PATH)/$(SUPPLIER)/filesystem/userfs/bin/wlNetlinkTool $(MODEL_FS_PATH)/usr/bin
+	#cp $(TOP_PATH)/$(SUPPLIER)/filesystem/userfs/bin/ated $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/public/wireless_tools.29/wlNetlinkTool $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/public/wireless_tools.29/ated_tp $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/public/wireless_tools.29/iwconfig $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/modules/private/wifi/wireless_bin/$(MODEL)/* $(MODEL_FS_PATH)/etc
+#	cp $(TOP_PATH)/$(SUPPLIER)/filesystem/userfs/bin/rt2860apd $(MODEL_FS_PATH)/usr/bin
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/public/8021X/rtdot1xd $(MODEL_FS_PATH)/usr/bin/rt2860apd
+#Build wscd with wifi modules
+#	cp $(TOP_PATH)/$(SUPPLIER)/apps/private/WSC_UPNP/wscd $(MODEL_FS_PATH)/usr/bin
+ifeq ($(INCLUDE_LAN_WLAN_AC), y)
+#	cd $(MODEL_FS_PATH)/usr/bin && ln -s wscd wscd_5G && ln -s rt2860apd rtinicapd && cd -
+endif
+	chmod +x $(MODEL_FS_PATH)/usr/bin/*
+else	#INCLUDE_LAN_WLAN
+	@echo no wifi
+endif	#INCLUDE_LAN_WLAN
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/public/bridge-utils-1.0.6/brctl/brctl $(MODEL_FS_PATH)/usr/sbin/
+
+
+ifeq ($(INCLUDE_VOIP),y)
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/private/voip/eva/bin/libadam.so $(MODEL_FS_PATH)/lib
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/private/voip/eva/bin/libgdi_mtk.so $(MODEL_FS_PATH)/lib
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/private/voip/MTK_SIP/install/lib/libbase.so $(MODEL_FS_PATH)/lib
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/private/voip/MTK_SIP/install/lib/libvdsp_user.so $(MODEL_FS_PATH)/lib
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/private/voip/MTK_SIP/install/lib/libslic_user.so $(MODEL_FS_PATH)/lib
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/private/voip/MTK_SIP/install/lib/libsyss.so $(MODEL_FS_PATH)/lib
+#	cp -f $(TOP_PATH)/$(SUPPLIER)/apps/private/voip/eva/bin/voip_loader $(MODEL_FS_PATH)/usr/bin
+endif
+#add by fang ruilong
+ifeq ($(INCLUDE_CLOUD), y)
+#	cp -r $(PRIVATE_APPS_PATH)/user/cloud/cloud-sdk/config/ $(MODEL_FS_PATH)/etc/cloud/
+endif
+#add end
+
+.PHONY:fs_modules
+fs_modules:
+	cd $(MODULE_TG_PATH) && rm -rf ./2.6.36/ && rm -rf ./usbhost
+	cp -pR $(MODULE_TG_PATH)/* $(MODEL_FS_PATH)/lib/modules
+	#Modified by Zhao Mengqing, 2016-7-4, do not copy all ko here, just copy what we need
+	#cp -pR $(TP_MODULES_PATH)/ko/*.ko $(MODEL_FS_PATH)/lib/modules
+ifeq ($(INCLUDE_VOIP), y)
+#	cp -pR $(TP_MODULES_PATH)/ko/voip.ko $(MODEL_FS_PATH)/lib/modules
+endif
+
+#by Zhao Mengqing, 2017-5-26, use different dmt
+	#copy dmt.ko
+ifeq ($(INCLUDE_DMT_EN7512), y)
+	cp -p $(DMT_PATH)/tc3162_dmt_en7512_forEN7512.ko $(MODEL_FS_PATH)/lib/modules/tc3162_dmt.ko
+else ifeq ($(INCLUDE_DMT_EN7512BA), y)
+	cp -p $(DMT_PATH)/tc3162_dmt_en7512_forEN7512BA.ko $(MODEL_FS_PATH)/lib/modules/tc3162_dmt.ko
+else
+#	cp -p $(DMT_PATH)/tc3162_dmt_en7512.ko $(MODEL_FS_PATH)/lib/modules/tc3162_dmt.ko
+endif
+	#These modules we do not need
+	rm -f $(MODEL_FS_PATH)/lib/modules/sif.ko
+	#rm -f $(MODEL_FS_PATH)/lib/modules/igmpsnoop.ko
+	rm -f $(MODEL_FS_PATH)/lib/modules/tcsmux.ko
+	rm -f $(MODEL_FS_PATH)/lib/modules/tcportbind.ko
+	rm -f $(MODEL_FS_PATH)/lib/modules/tcvlantag.ko
+#end add 	
+#add by yuchuwei,now for PV-W42T-1200ACG,actual for PV-W422T-1200ACG
+ifeq ($(INCLUDE_VOIP), y)
+#	cp -pR $(TOP_PATH)/$(SUPPLIER)/modules/private/voip_2.6.36/ko/*.ko $(MODEL_FS_PATH)/lib/modules
+endif
+
+ifeq ($(INCLUDE_DECT), y)
+	cp -pR $(SLIB_PATH)/../lib/modules/2.6.32.42/voip_timer_driver.ko $(MODEL_FS_PATH)/lib/modules
+	cp -pR $(SLIB_PATH)/../lib/modules/2.6.32.42/ifx_timer_driver.ko $(MODEL_FS_PATH)/lib/modules
+	cp -pR $(SLIB_PATH)/../usr/drivers/drv_dect.ko $(MODEL_FS_PATH)/lib/modules
+	cp -pR $(SLIB_PATH)/../usr/drivers/paging.ko $(MODEL_FS_PATH)/lib/modules
+	cp -pR $(SLIB_PATH)/../usr/drivers/drv_timer.ko $(MODEL_FS_PATH)/lib/modules
+endif
+
+ifeq ($(INCLUDE_USB_OVER_IP), y)
+ifeq ($(INCLUDE_USB_OVER_IP_TPLINK), y)
+	cp -p $(TOP_PATH)/$(SUPPLIER)/modules/public/usbip-0.1.7/usbip.ko $(MODEL_FS_PATH)/lib/modules
+	cp -p $(TOP_PATH)/$(SUPPLIER)/modules/public/usbip-0.1.7/usbip_common_mod.ko $(MODEL_FS_PATH)/lib/modules
+else   # INCLUDE_USB_OVER_IP_TPLINK
+ifeq ($(INCLUDE_VOIP), y)
+ifeq ($(strip $(CONFIG_NR_CPUS)), 2)
+	cp -p $(TP_MODULES_PATH)/ko/kcode/NetUSB2_$(MODEL).ko $(MODEL_FS_PATH)/lib/modules/NetUSB.ko
+	-cp -p $(TP_MODULES_PATH)/ko/kcode/GPL_NetUSB2_$(MODEL).ko $(MODEL_FS_PATH)/lib/modules/GPL_NetUSB.ko
+else   # CONFIG_NR_CPUS
+	cp -p $(TOP_PATH)/$(SUPPLIER)/modules/private/kcode/NetUSB_$(MODEL).ko $(MODEL_FS_PATH)/lib/modules/NetUSB.ko
+	-cp -p $(TOP_PATH)/$(SUPPLIER)/modules/private/kcode/GPL_NetUSB_$(MODEL).ko $(MODEL_FS_PATH)/lib/modules/GPL_NetUSB.ko
+endif  # CONFIG_NR_CPUS	
+else   # INCLUDE_VOIP
+	cp -p $(TOP_PATH)/$(SUPPLIER)/modules/private/kcode/NetUSB_$(MODEL).ko $(MODEL_FS_PATH)/lib/modules/NetUSB.ko
+	-cp -p $(TOP_PATH)/$(SUPPLIER)/modules/private/kcode/GPL_NetUSB_$(MODEL).ko $(MODEL_FS_PATH)/lib/modules/GPL_NetUSB.ko
+endif  # INCLUDE_VOIP	
+endif  # INCLUDE_USB_OVER_IP_TPLINK
+endif  # INCLUDE_USB_OVER_IP
+
+ifeq ($(INCLUDE_PPTP), y)
+	cp -p $(TOP_PATH)/$(SUPPLIER)/modules/public/accel-pptp-0.8.5/pptp.ko $(MODEL_FS_PATH)/lib/modules
+endif
+
+ifeq ($(INCLUDE_L2TP), y)
+ifeq ($(KERNELVERSION), 2.6.22.15)
+	cp -p $(TOP_PATH)/$(SUPPLIER)/modules/public/pppol2tp-kmod-0.17/pppol2tp.ko $(MODEL_FS_PATH)/lib/modules
+else
+ifeq ($(KERNELVERSION), 2.6.36)
+	cp -p $(KERNELPATH)/net/l2tp/l2tp_core.ko $(MODEL_FS_PATH)/lib/modules/pppol2tp.ko
+	cp -p $(KERNELPATH)/net/l2tp/l2tp_ppp.ko $(MODEL_FS_PATH)/lib/modules/l2tp_ppp.ko
+	rm $(MODEL_FS_PATH)/lib/modules/kmdir/kernel/net/l2tp/*.ko
+else
+	cp -p $(KERNELPATH)/drivers/net/pppol2tp.ko $(MODEL_FS_PATH)/lib/modules
+endif
+endif
+endif
+	mkdir -p $(MODEL_FS_PATH)/lib/modules/kmdir/kernel/drivers/net
+	cp -p $(KERNELPATH)/drivers/net/tun.ko $(MODEL_FS_PATH)/lib/modules/kmdir/kernel/drivers/net
+	cp -p $(KERNELPATH)/drivers/net/ppp_mppe.ko $(MODEL_FS_PATH)/lib/modules/kmdir/kernel/drivers/net
+
+.PHONY:fs_sysfiles
+fs_sysfiles: 
+#	cp -pR $(WEBFILE_PATH)/common/* $(MODEL_FS_PATH)/web/
+ifeq ($(INCLUDE_VOIP), y)
+#	find  $(MODEL_FS_PATH)/web/ -name ".svn" | xargs rm -rf
+#	cp -pR $(WEBFILE_PATH)/common_voice/* $(MODEL_FS_PATH)/web/
+ifeq ($(INCLUDE_CALLTHROUGH),)
+	@echo "not include callthrough"
+#	rm -f $(MODEL_FS_PATH)/web/voice_callthrough.htm
+endif
+endif
+ifeq ($(INCLUDE_WLAN_LQ), y)
+#	cp -pR $(WEBFILE_PATH)/common_spec/Lantiq/* $(MODEL_FS_PATH)/web/
+endif
+ifeq ($(WEB_INCLUDE_MOBILE_UI), y)
+#	find  $(MODEL_FS_PATH)/web/ -name ".svn" | xargs rm -rf
+#	cp -pR $(WEBFILE_PATH)/common_mobile/* $(MODEL_FS_PATH)/web/
+endif
+ifeq ($(INCLUDE_GERMANY_SPEC), y)
+#	find  $(MODEL_FS_PATH)/web/ -name ".svn" | xargs rm -rf
+#	if test -d $(WEBFILE_PATH)/common_spec/GERMANY/js/en; then \
+#	cp -f $(WEBFILE_PATH)/common_spec/GERMANY/js/en/* $(MODEL_FS_PATH)/web/js; \
+#	fi
+#	cp -pR $(WEBFILE_PATH)/common_spec/GERMANY/* $(MODEL_FS_PATH)/web/
+	
+#	if test -d $(MODEL_FS_PATH)/web/js/en; then \
+#	rm -fr $(MODEL_FS_PATH)/web/js/en; \
+#	fi
+endif
+ifneq ($(INCLUDE_AUTH_PASSWORD), y)
+#	cp -f $(MODEL_FS_PATH)/web/frame/loginUsername.htm $(MODEL_FS_PATH)/web/frame/login.htm
+#	rm -f $(MODEL_FS_PATH)/web/frame/loginUsername.htm
+endif
+
+ifeq ($(INCLUDE_DSL_EWAN_COEXIST), y)
+#	find  $(MODEL_FS_PATH)/web/ -name ".svn" | xargs rm -rf
+#	if test -d $(WEBFILE_PATH)/common_wan_coexist; then \
+#	cp -pR $(WEBFILE_PATH)/common_wan_coexist/* $(MODEL_FS_PATH)/web/; \
+#	fi
+endif
+
+ifeq ($(INCLUDE_MULTI_LANGUAGE), y)
+#	mkdir $(MODEL_FS_PATH)/web/locale/
+#	cp -pR $(WEBFILE_PATH)/common_language/language.js $(MODEL_FS_PATH)/web/locale/
+ifeq ($(INCLUDE_LANGUAGE_EN_US), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/en_US/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_DE_DE), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/de_DE/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_IT_IT), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/it_IT/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_RU_RU), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/ru_RU/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_TR_TR), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/tr_TR/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_PL_PL), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/pl_PL/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_FR_FR), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/fr_FR/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_ES_ES), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/es_ES/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_ES_LA), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/es_LA/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_PT_BR), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/pt_BR/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_EL_GR), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/el_GR/ $(MODEL_FS_PATH)/web/locale/
+endif
+ifeq ($(INCLUDE_LANGUAGE_TH_TH), y)
+#	cp -pR $(WEBFILE_PATH)/common_language/th_TH/ $(MODEL_FS_PATH)/web/locale/
+endif
+endif
+ifeq ($(INCLUDE_LOGIN_GDPR_ENCRYPT), y)
+#	cp -pR $(WEBFILE_PATH)/common_gdpr/* $(MODEL_FS_PATH)/web/
+endif
+ifeq ($(MODEL), VMG1312T20AV1)
+#	cp -pR $(WEBFILE_PATH)/VMG1312-T20A/common/* $(MODEL_FS_PATH)/web/
+ifeq ($(INCLUDE_LANGUAGE_EN_US), y)
+#	cp -pR $(WEBFILE_PATH)/VMG1312-T20A/common_language/en_US/* $(MODEL_FS_PATH)/web/locale/en_US
+endif
+endif
+
+#added by ylx,ly,gcb
+ifeq ($(INCLUDE_PORTABLE_APP), y)
+	python $(PRIVATE_APPS_PATH)/user/tpApp/json_tools/xDslIspJs2Json.py $(JSON_INOUT_PATH)/isp.js $(JSON_INOUT_PATH)/xDslIsp.json 
+	python $(PRIVATE_APPS_PATH)/user/tpApp/json_tools/xDslIptvVoipIspJs2Json.py $(JSON_INOUT_PATH)/isp.js $(JSON_INOUT_PATH)/xDslIspVV.json 
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+	python $(PRIVATE_APPS_PATH)/user/tpApp/json_tools/3gIspJs2Json.py $(JSON_INOUT_PATH)/isp3g.js $(JSON_INOUT_PATH)/3g.json
+endif
+#	cp -pR $(JSON_INOUT_PATH)/*.json* $(MODEL_FS_PATH)/web/js
+	rm $(JSON_INOUT_PATH)/*.json*
+endif
+#end add by ylx
+
+#	cd $(MODEL_FS_PATH)/web/js && echo $(DFLAGS) | sed 's/-D//g' | sed "s/\([^ ]\{1,\}\)/-e s\/\\\\\\\<\1\\\\\\\>\/\1=1\//g" | sed -e 's/=[0-9]\\/\\/g' -e 's/=\([0-9]\{1,\}\)=1/=\1/g' | xargs sed oid_str.js > temp1.js
+#	cd $(MODEL_FS_PATH)/web/js && echo $(WEBFLAGS) | sed 's/ /\n/g' | sed 's/^/var /g' | sed 's/$$/\n/g' > temp2.js && cat temp1.js >> temp2.js && mv temp2.js oid_str.js && rm temp1.js | sed -i "/^[ \t]*\/\*/,/.*\*\//d" oid_str.js
+
+#	cp -pR $(CONFFILE_PATH)/common/default_config.xml $(MODEL_FS_PATH)/etc/default_config.xml
+#ifeq ($(CONFFILE_PATH)/oem/$(MODEL)/default_config.xml, $(wildcard $(CONFFILE_PATH)/oem/$(MODEL)/default_config.xml))
+#	cp -pR $(CONFFILE_PATH)/oem/$(MODEL)/default_config.xml $(MODEL_FS_PATH)/etc/default_config.xml
+#endif
+
+	$(TOOLS_PATH)/mkcfg -m $(CONFFILE_PATH)/common/reduced_data_model.xml -s $(CONFFILE_PATH)/oem/$(MODEL)/reduced_data_model.xml -o $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	cp -pR $(MODEL_FS_PATH)/etc/reduced_data_model.xml $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL).xml
+	cp -pR $(MODEL_FS_PATH)/etc/reduced_data_model.xml $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml
+	cp -pR $(MODEL_FS_PATH)/etc/reduced_data_model.xml $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml
+	cp -pR $(MODEL_FS_PATH)/etc/reduced_data_model.xml $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml
+	sed -i 's/\(X_TP_IsTrans.*d=\)./\10/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml
+	sed -i 's/\(X_TP_IsBeta.*d=\)./\11/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml
+	sed -i 's/\(X_TP_IsDateCode.*d=\)./\10/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml
+	sed -i 's/\(X_TP_IsTrans.*d=\)./\11/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml
+	sed -i 's/\(X_TP_IsBeta.*d=\)./\10/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml
+	sed -i 's/\(X_TP_IsDateCode.*d=\)./\10/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml
+	sed -i 's/\(X_TP_IsTrans.*d=\)./\10/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml
+	sed -i 's/\(X_TP_IsBeta.*d=\)./\10/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml
+	sed -i 's/\(X_TP_IsDateCode.*d=\)./\11/' $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml
+	
+
+#	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/default_config.xml
+	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	
+#	find $(MODEL_FS_PATH)/lib -name "*.so*" -type f | xargs $(STRIP) --strip-unneeded 
+	find $(MODEL_FS_PATH)/lib -name "*.ko" | xargs $(STRIP) --strip-unneeded 
+	$(STRIP) $(MODEL_FS_PATH)/usr/bin/*
+
+#copy spec web file
+#	if test -d $(WEBFILE_PATH)/common_spec/$(MODEL); then \
+#	cp -pR $(WEBFILE_PATH)/common_spec/$(MODEL)/* $(MODEL_FS_PATH)/web/; \
+#	fi
+	
+# remove unnecessary htm to reduce fs size
+ifneq ($(INCLUDE_USB), y)
+
+endif
+ifneq ($(INCLUDE_USB_3G_DONGLE), y)
+
+endif
+ifneq ($(INCLUDE_USB_STORAGE), y)
+
+endif
+ifneq ($(INCLUDE_USB_OVER_IP), y)
+
+endif
+ifneq ($(INCLUDE_LED_SCHEDULE), y)
+
+endif
+ifneq ($(INCLUDE_IPTV), y)
+
+endif
+ifneq ($(INCLUDE_VOIP), y)
+
+endif 
+ifneq ($(INCLUDE_QOS), y)
+
+endif
+ifneq ($(INCLUDE_E8_APP), y)
+
+endif
+ifneq ($(INCLUDE_APP_IQOS), y)
+	@rm -rf $(MODEL_FS_PATH)/etc/iqos
+	@rm -rf $(MODEL_FS_PATH)/usr/bin/iqos-db-loader
+	@rm -rf $(MODEL_FS_PATH)/usr/bin/iqos-db-parser
+endif
+ifneq ($(INCLUDE_CLOUD), y)
+
+endif
+
+.PHONY:fs_rootfs
+fs_rootfs: 
+	find  $(MODEL_FS_PATH) -name ".svn" | xargs rm -rf
+ifeq ($(INCLUDE_VOIP), y)
+#	cp -p $(WEBFILE_PATH)/common_mark_img/mark_white.gif $(MODEL_FS_PATH)//web/img/mark_copy.gif
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) voip 0
+	cp -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml $(MODEL_FS_PATH)/etc/reduced_data_model.xml 
+	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) voip 1
+#	cp -p $(WEBFILE_PATH)/common_mark_img/mark_trans.gif $(MODEL_FS_PATH)//web/img/mark_copy.gif
+	cp -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml $(MODEL_FS_PATH)/etc/reduced_data_model.xml 
+	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) voip 2
+#	cp -p $(WEBFILE_PATH)/common_mark_img/mark_datecode.gif $(MODEL_FS_PATH)//web/img/mark_copy.gif
+	cp -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml $(MODEL_FS_PATH)/etc/reduced_data_model.xml 
+	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) voip 3
+else
+#	cp -p $(WEBFILE_PATH)/common_mark_img/mark_white.gif $(MODEL_FS_PATH)//web/img/mark_copy.gif
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) novoip 0
+	cp -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml $(MODEL_FS_PATH)/etc/reduced_data_model.xml 
+	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) novoip 1
+#	cp -p $(WEBFILE_PATH)/common_mark_img/mark_trans.gif $(MODEL_FS_PATH)//web/img/mark_copy.gif
+	cp -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml $(MODEL_FS_PATH)/etc/reduced_data_model.xml 
+	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) novoip 2
+#	cp -p $(WEBFILE_PATH)/common_mark_img/mark_datecode.gif $(MODEL_FS_PATH)//web/img/mark_copy.gif
+	cp -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml $(MODEL_FS_PATH)/etc/reduced_data_model.xml 
+	$(TOOLS_PATH)/enc -e -i $(MODEL_FS_PATH)/etc/reduced_data_model.xml
+	cd $(TOOLS_PATH) && ./buildFs $(MODEL_FS_PATH) $(ROOTFSTOOLS) $(MODEL) $(SUPPLIER) novoip 3
+endif
+
+$(FAKEROOT_PATH)/.configured:
+	(tar -jkxf fakeroot.tar.bz2 2> /dev/null || true)
+	cd $(FAKEROOT_PATH); CFLAGS="-O2 -DGNU -I./" CC=gcc ./configure --prefix=/usr --disable-nls
+	touch $@
+	make -C $(FAKEROOT_PATH)
+
+.PHONY:fakeroot
+fakeroot: $(FAKEROOT_PATH)/.configured
+	@sed -e 's,^PREFIX=.*,PREFIX=$(FAKEROOT_PATH),g' -e 's,^BINDIR=.*,BINDIR=$(FAKEROOT_PATH),g' -e 's,^PATHS=.*,PATHS=$(FAKEROOT_PATH)/.libs:/lib:/usr/lib,g' $(FAKEROOT_PATH)/scripts/fakeroot > $(FAKEROOT_PATH)/fakeroot
+	@chmod u+x $(FAKEROOT_PATH)/fakeroot
+
+	
+####################################################
+#
+#Build image
+#
+####################################################
+
+.PHONY:mkkernel_build
+mkkernel_build:
+	test -d $(TARGETS_PATH)/image_$(MODEL)/ || mkdir -p $(TARGETS_PATH)/image_$(MODEL)/
+	$(TOOLS_PATH)/mkkernel2 -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL).xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL) -v $(KERNEL_TG_PATH)/vmlinux -i $(TARGETS_PATH)/image_$(MODEL)
+
+.PHONY:image_build
+image_build: mkkernel_build
+	test -d $(TARGETS_PATH)/image_$(MODEL)/ || mkdir -p $(TARGETS_PATH)/image_$(MODEL)/
+	@if test -e $(CONFFILE_PATH)/oem/$(MODEL)/MFG_conf.bin; \
+	then \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL).xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL) -v $(KERNEL_TG_PATH)/vmlinux -c $(CONFFILE_PATH)/oem/$(MODEL)/MFG_conf.bin -i $(TARGETS_PATH)/image_$(MODEL); \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL).beta -v $(KERNEL_TG_PATH)/vmlinux -c $(CONFFILE_PATH)/oem/$(MODEL)/MFG_conf.bin -i $(TARGETS_PATH)/image_$(MODEL); \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL).trans -v $(KERNEL_TG_PATH)/vmlinux -c $(CONFFILE_PATH)/oem/$(MODEL)/MFG_conf.bin -i $(TARGETS_PATH)/image_$(MODEL); \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL).datecode -v $(KERNEL_TG_PATH)/vmlinux -c $(CONFFILE_PATH)/oem/$(MODEL)/MFG_conf.bin -i $(TARGETS_PATH)/image_$(MODEL); \
+	else \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL).xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL) -v $(KERNEL_TG_PATH)/vmlinux -i $(TARGETS_PATH)/image_$(MODEL); \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_beta.xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL).beta -v $(KERNEL_TG_PATH)/vmlinux -i $(TARGETS_PATH)/image_$(MODEL); \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_trans.xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL).trans -v $(KERNEL_TG_PATH)/vmlinux -i $(TARGETS_PATH)/image_$(MODEL); \
+	$(TOOLS_PATH)/mkimage/mkimage2  -s $(FLASH_SIZE) -m $(KERNEL_MAX_SIZE) -e $(CMM_TARGET_CPU_ENDIAN) -t $(MTD_PART_TYPE) -p $(MODEL_FS_PATH)/../reduced_data_model_plaintext_$(MODEL)_datecode.xml -b $(BOOT_TG_PATH)/boot.bin -k $(KERNEL_TG_PATH)/linux.7z -f $(TARGETS_PATH)/rootfs.$(MODEL).datecode -v $(KERNEL_TG_PATH)/vmlinux -i $(TARGETS_PATH)/image_$(MODEL); \
+	fi
+	
+.PHONY:dualImage_build
+dualImage_build:
+	test -d $(TARGETS_PATH)/dimage_$(MODEL)/ || mkdir -p $(TARGETS_PATH)/dimage_$(MODEL)/
+#	$(TOOLS_PATH)/buildDualImage $(TARGETS_PATH)
+	cd $(TOOLS_PATH) && ./buildDualImage.sh $(TARGETS_PATH) $(MODEL)	
+
+####################################################
+#
+# Clear object               
+#
+###################################################
+clean:boot_clean kernel_clean modules_clean apps_clean fs_clean fakeroot_clean
+	@echo "Clear All Object"
+
+boot_clean:
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo bootbase_clean
+
+kernel_clean:
+	cd $(KERNELPATH) && $(MAKE) clean
+	rm -rf $(KERNEL_TG_PATH)
+
+modules_clean:
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo modules_clean
+
+ifeq ($(INCLUDE_USB_OVER_IP_TPLINK), y)
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/public/usbip-0.1.7 && $(MAKE) clean
+endif
+
+#	cd $(MODULES_PATH)/ipt_STAT && $(MAKE) clean
+
+	cd $(MODULES_PATH)/domain_login && $(MAKE) clean
+
+ifneq ($(strip $(INCLUDE_VOIP)),)
+	cd $(TP_MODULES_PATH)/voip/ && $(MAKE) clean
+endif
+	rm -rf $(MODULE_TG_PATH)
+# end--added
+
+ifeq ($(INCLUDE_PPTP), y)
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/public/accel-pptp-0.8.5 && $(MAKE) clean
+endif
+
+ifeq ($(INCLUDE_L2TP), y)
+ifeq ($(KERNELVERSION), 2.6.22.15)
+	@echo "Kernel version is lower than 2.6.23, clean pppol2tp-kmod-0.17"
+	cd $(TOP_PATH)/$(SUPPLIER)/modules/public/pppol2tp-kmod-0.17 && $(MAKE) clean
+endif
+endif
+
+#frl add,2015-10-23
+ifeq ($(INCLUDE_WAN_BLOCK), y)
+	cd $(MODULES_PATH)/wportal && $(MAKE) clean
+endif
+#add end
+
+.PHONY:apps_clean
+apps_clean:cmm_clean voip_clean pjsip_clean openssl_clean
+#	$(MAKE) -C $(PUBLIC_APPS_PATH)/busybox-1.23.2 clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/iproute2-2.6.39  clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/iptables-1.4.17 clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/br2684ctl clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/ebtables-v2.0.10-4 clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/ppp-2.4.5/pppd clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/linux-atm clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/upnp_libs clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/IGD clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/os_libs clean
+
+
+ifeq ($(INCLUDE_SSL), y)
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh && $(MAKE) clean
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh && rm -rf ./lib && rm -rf ./install
+endif
+	
+ifeq ($(INCLUDE_USB_OVER_IP_TPLINK), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/usbip-0.1.7 clean
+endif
+
+ifeq ($(INCLUDE_USB_FTP_SERVER), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/vsftpd-2.3.2 clean
+endif
+
+ifeq ($(INCLUDE_RIP), y)
+#	$(MAKE) -C $(PUBLIC_APPS_PATH)/zebra-0.95a clean
+endif
+
+ifeq ($(INCLUDE_IPV6), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/radvd-1.5 clean
+endif
+
+ifeq ($(INCLUDE_IPV6), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/wide-dhcpv6-20080615 clean
+endif
+
+ifeq ($(INCLUDE_IPV6), y)
+	cd $(PUBLIC_APPS_PATH)/flex-2.5.35 && test -e Makefile || ./configure --host=mips-linux 
+	cd $(PUBLIC_APPS_PATH)/flex-2.5.35 && $(MAKE) clean
+	rm -rf $(PUBLIC_APPS_PATH)/lib
+endif
+	
+ifeq ($(INCLUDE_IPV6), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/iproute2-2.6.39 clean
+endif
+
+ifeq ($(INCLUDE_USB_STORAGE), y)
+	#for the clean of samba and ntfs-3g, zjj, 20111129
+ifeq ($(INCLUDE_USB_SAMBA_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/samba-3.6.25/source3 && $(MAKE) clean
+endif	#INCLUDE_USB_SAMBA_SERVER
+	cd $(PUBLIC_APPS_PATH)/ntfs-3g_ntfsprogs-2012.1.15 && $(MAKE) clean
+	cd $(PRIVATE_APPS_PATH)/usbp && $(MAKE) clean
+	cd $(PRIVATE_APPS_PATH)/hotplug && $(MAKE) clean
+	#end by zjj
+else
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+	cd $(PRIVATE_APPS_PATH)/hotplug && $(MAKE) clean
+endif #INCLUDE_USB_3G_DONGLE
+endif	#INCLUDE_USB_STORAGE
+
+ifeq ($(INCLUDE_USB_3G_DONGLE), y)
+	cd $(PUBLIC_APPS_PATH)/ppp-2.4.5/chat && $(MAKE) clean
+#	cd $(PUBLIC_APPS_PATH)/usb-modeswitch-1.2.3 && $(MAKE) clean
+	cd $(PUBLIC_APPS_PATH)/libusb-1.0.8 && $(MAKE) clean && rm -rf install/*
+	cd $(PUBLIC_APPS_PATH)/libusb-compat-0.1.3 && $(MAKE) clean && rm -rf install/*
+	cd $(PRIVATE_APPS_PATH)/handle_card && $(MAKE) clean
+endif
+
+ifeq ($(INCLUDE_PORTABLE_APP), y)
+	cd $(PUBLIC_APPS_PATH)/dropbear && $(MAKE) clean
+else ifeq ($(INCLUDE_SSH_ACCESS), y)
+	cd $(PUBLIC_APPS_PATH)/dropbear && $(MAKE) clean
+endif
+
+#for DLNA_CLEAN
+ifeq ($(INCLUDE_USHARE), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/ffmpeg-0.6 clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/libdlna-0.2.3 clean
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/ushare-1.1a clean
+endif
+ifeq ($(INCLUDE_MINIDLNA), y)
+	cd $(PUBLIC_APPS_PATH)/media_server && $(MAKE) clean
+endif
+ifeq ($(INCLUDE_LITE_MINIDLNA), y)
+	cd $(PUBLIC_APPS_PATH)/media_server && $(MAKE) lite_clean
+endif
+#end for DLNA_CLEAN
+
+#add by Zhao Mengqing, For PV-W42T-1200ACG 1.0, 2016-4-6
+ifeq ($(strip $(SUPPLIER)),$(filter $(SUPPLIER), mtk mtk_EN7513G_EN7512))
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo ethcmd_clean
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo api_lib_clean
+	cd $(TOP_PATH)/$(SUPPLIER) &&  make PROFILE=$(CPU_TYPE)_demo api_cmd_clean
+endif
+#end add 
+ifeq ($(INCLUDE_IPSEC), y)
+	cd $(PUBLIC_APPS_PATH)/ipsectools && $(MAKE) clean
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh && $(MAKE) clean
+	cd $(PUBLIC_APPS_PATH)/openssl-0.9.8zh && rm -rf ./lib
+	rm -rf $(PUBLIC_APPS_PATH)/myipsec 
+	rm -rf $(PUBLIC_APPS_PATH)/myssl
+endif
+
+#added by CCy for VPN, 2015-08-10
+ifeq ($(INCLUDE_OPENVPN_SERVER), y)
+	cd $(PUBLIC_APPS_PATH)/openvpn-2.3.6 && $(MAKE)  clean && rm -rf ./install
+	cd $(PUBLIC_APPS_PATH)/lzo-2.09 && $(MAKE)  clean && rm -rf ./install
+endif
+
+ifeq ($(INCLUDE_PPTPVPN_SERVER), y)
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/pptpd-1.4.0 clean
+endif
+#add ended
+
+#add start by fang ruilong for cloud_client, 2015-09-08
+ifeq ($(INCLUDE_CLOUD), y)
+	cd $(PUBLIC_APPS_PATH)/curl-7.29.0 && $(MAKE) clean && rm -rf ./install
+endif
+#add end
+
+.PHONY: voip_clean
+voip_clean:
+ifneq ($(strip $(INCLUDE_VOIP)),)
+	$(MAKE) -C $(PRIVATE_APPS_PATH)/voip clean
+ifeq ($(INCLUDE_DECT), y)
+	if test -d "$(TOP_PATH)/$(SUPPLIER)/build_dir/target-mips_r2_uClibc-0.9.30.1_AC750/voip_dectcli/src"; then	\
+	cd $(TOP_PATH)/$(SUPPLIER)/build_dir/target-mips_r2_uClibc-0.9.30.1_AC750/voip_dectcli/src && $(MAKE) clean;	\
+	fi
+endif
+else	
+	@echo "skipped voip_clean"
+endif
+	
+.PHONY: pjsip_clean
+pjsip_clean:
+ifneq ($(strip $(INCLUDE_VOIP)),)
+	rm -f $(PUBLIC_APPS_PATH)/pjsip_1.10/config_cache_file
+	$(MAKE) -C $(PUBLIC_APPS_PATH)/pjsip_1.10 clean
+else	
+	@echo "skipped sip_clean"
+endif
+	
+.PHONY:cmm_clean
+cmm_clean:
+	$(MAKE) -C $(PRIVATE_APPS_PATH)/user clean
+
+ifeq ($(INCLUDE_L2TP), y)
+	cd $(PUBLIC_APPS_PATH)/xl2tpd-1.1.12 && $(MAKE) clean
+endif
+
+#for mediaServer, modify by zengdongbiao, 21May15
+.PHONY: dlna_distclean
+dlna_distclean: 
+ifeq ($(INCLUDE_MINIDLNA), y)
+	cd $(PUBLIC_APPS_PATH)/media_server && $(MAKE) distclean
+endif
+ifeq ($(INCLUDE_LITE_MINIDLNA), y)
+	cd $(PUBLIC_APPS_PATH)/media_server && $(MAKE) lite_distclean
+endif
+#end modify by zengdongbiao

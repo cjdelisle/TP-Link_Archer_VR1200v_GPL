@@ -1,0 +1,216 @@
+osip_cseq.lo: osip_cseq.c \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdlib.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/features.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_config.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/cdefs.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stddef.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/types.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/types.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wordsize.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/typesizes.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/pthreadtypes.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/endian.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/endian.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/byteswap.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap-common.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sgidefs.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/time.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/select.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/select.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigset.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/time.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/sysmacros.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/alloca.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdio.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_stdio.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/wchar.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wchar.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_mutex.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pthread.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sched.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sched.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_clk_tck.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/signal.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/setjmp.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_pthread.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stdarg.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/stdio_lim.h \
+  ../../include/osipparser2/osip_port.h ../../config.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/string.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/time.h \
+  ../../include/osipparser2/osip_const.h \
+  ../../include/osipparser2/osip_list.h \
+  ../../include/osipparser2/osip_message.h \
+  ../../include/osipparser2/osip_headers.h \
+  ../../include/osipparser2/osip_uri.h \
+  ../../include/osipparser2/headers/osip_header.h \
+  ../../include/osipparser2/headers/osip_accept.h \
+  ../../include/osipparser2/headers/osip_content_type.h \
+  ../../include/osipparser2/headers/osip_accept_encoding.h \
+  ../../include/osipparser2/headers/osip_accept_language.h \
+  ../../include/osipparser2/headers/osip_alert_info.h \
+  ../../include/osipparser2/headers/osip_call_info.h \
+  ../../include/osipparser2/headers/osip_allow.h \
+  ../../include/osipparser2/headers/osip_content_length.h \
+  ../../include/osipparser2/headers/osip_authorization.h \
+  ../../include/osipparser2/headers/osip_call_id.h \
+  ../../include/osipparser2/headers/osip_contact.h \
+  ../../include/osipparser2/headers/osip_from.h \
+  ../../include/osipparser2/headers/osip_content_disposition.h \
+  ../../include/osipparser2/headers/osip_content_encoding.h \
+  ../../include/osipparser2/headers/osip_cseq.h \
+  ../../include/osipparser2/headers/osip_error_info.h \
+  ../../include/osipparser2/headers/osip_mime_version.h \
+  ../../include/osipparser2/headers/osip_proxy_authenticate.h \
+  ../../include/osipparser2/headers/osip_www_authenticate.h \
+  ../../include/osipparser2/headers/osip_proxy_authorization.h \
+  ../../include/osipparser2/headers/osip_record_route.h \
+  ../../include/osipparser2/headers/osip_route.h \
+  ../../include/osipparser2/headers/osip_to.h \
+  ../../include/osipparser2/headers/osip_via.h \
+  ../../include/osipparser2/osip_body.h
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdlib.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/features.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_config.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/cdefs.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stddef.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/types.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/types.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wordsize.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/typesizes.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/pthreadtypes.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/endian.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/endian.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/byteswap.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap-common.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sgidefs.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/time.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/select.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/select.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigset.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/time.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/sysmacros.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/alloca.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdio.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_stdio.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/wchar.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wchar.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_mutex.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pthread.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sched.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sched.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_clk_tck.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/signal.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/setjmp.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_pthread.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stdarg.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/stdio_lim.h:
+
+../../include/osipparser2/osip_port.h:
+
+../../config.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/string.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/time.h:
+
+../../include/osipparser2/osip_const.h:
+
+../../include/osipparser2/osip_list.h:
+
+../../include/osipparser2/osip_message.h:
+
+../../include/osipparser2/osip_headers.h:
+
+../../include/osipparser2/osip_uri.h:
+
+../../include/osipparser2/headers/osip_header.h:
+
+../../include/osipparser2/headers/osip_accept.h:
+
+../../include/osipparser2/headers/osip_content_type.h:
+
+../../include/osipparser2/headers/osip_accept_encoding.h:
+
+../../include/osipparser2/headers/osip_accept_language.h:
+
+../../include/osipparser2/headers/osip_alert_info.h:
+
+../../include/osipparser2/headers/osip_call_info.h:
+
+../../include/osipparser2/headers/osip_allow.h:
+
+../../include/osipparser2/headers/osip_content_length.h:
+
+../../include/osipparser2/headers/osip_authorization.h:
+
+../../include/osipparser2/headers/osip_call_id.h:
+
+../../include/osipparser2/headers/osip_contact.h:
+
+../../include/osipparser2/headers/osip_from.h:
+
+../../include/osipparser2/headers/osip_content_disposition.h:
+
+../../include/osipparser2/headers/osip_content_encoding.h:
+
+../../include/osipparser2/headers/osip_cseq.h:
+
+../../include/osipparser2/headers/osip_error_info.h:
+
+../../include/osipparser2/headers/osip_mime_version.h:
+
+../../include/osipparser2/headers/osip_proxy_authenticate.h:
+
+../../include/osipparser2/headers/osip_www_authenticate.h:
+
+../../include/osipparser2/headers/osip_proxy_authorization.h:
+
+../../include/osipparser2/headers/osip_record_route.h:
+
+../../include/osipparser2/headers/osip_route.h:
+
+../../include/osipparser2/headers/osip_to.h:
+
+../../include/osipparser2/headers/osip_via.h:
+
+../../include/osipparser2/osip_body.h:

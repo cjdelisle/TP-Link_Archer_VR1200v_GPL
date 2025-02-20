@@ -1,0 +1,377 @@
+utils.o: utils.c ../config.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdlib.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/features.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_config.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/cdefs.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stddef.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/waitflags.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/waitstatus.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/endian.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/endian.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/byteswap.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap-common.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/types.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/types.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wordsize.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/typesizes.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/pthreadtypes.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sgidefs.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/time.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/select.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/select.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigset.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/time.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/sysmacros.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/alloca.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/unistd.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix_opt.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/environments.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/confname.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/getopt.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm-generic/errno-base.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_clk_tck.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/signal.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/signum.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/siginfo.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigaction.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigcontext.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigstack.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/ucontext.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigthread.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/string.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/socket.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/uio.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uio.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/socket.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/limits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/syslimits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/limits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix1_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/local_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/limits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_local_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix2_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/xopen_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/stdio_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sockaddr.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/socket.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/sockios.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/ioctl.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm-generic/ioctl.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/netinet/in.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdint.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wchar.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/in.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/arpa/inet.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/netdb.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/rpc/netdb.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/netdb.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/net/if.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/ioctl.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/ioctls.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/ioctls.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/ioctl-types.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/ttydefaults.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pwd.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdio.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_parser.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_message.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_const.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_headers.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_port.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_stdio.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/wchar.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_mutex.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pthread.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sched.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sched.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/setjmp.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_pthread.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stdarg.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/time.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_list.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_uri.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_header.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_accept.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_type.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_accept_encoding.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_accept_language.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_alert_info.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_call_info.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_allow.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_length.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_authorization.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_call_id.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_contact.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_from.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_disposition.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_encoding.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_cseq.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_error_info.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_mime_version.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_proxy_authenticate.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_www_authenticate.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_proxy_authorization.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_record_route.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_route.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_to.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_via.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_body.h \
+  siproxd.h log.h
+
+../config.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdlib.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/features.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_config.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/cdefs.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stddef.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/waitflags.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/waitstatus.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/endian.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/endian.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/byteswap.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap-common.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/types.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/types.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wordsize.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/typesizes.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/pthreadtypes.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sgidefs.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/time.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/select.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/select.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigset.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/time.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/sysmacros.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/alloca.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/unistd.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix_opt.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/environments.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/confname.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/getopt.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm-generic/errno-base.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_clk_tck.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/signal.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/signum.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/siginfo.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigaction.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigcontext.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigstack.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/ucontext.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigthread.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/string.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/socket.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/uio.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uio.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/socket.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/limits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/syslimits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/limits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix1_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/local_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/limits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_local_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix2_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/xopen_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/stdio_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sockaddr.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/socket.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/sockios.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/ioctl.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm-generic/ioctl.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/netinet/in.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdint.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wchar.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/in.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/arpa/inet.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/netdb.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/rpc/netdb.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/netdb.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/net/if.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/ioctl.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/ioctls.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/ioctls.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/ioctl-types.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/ttydefaults.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pwd.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdio.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_parser.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_message.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_const.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_headers.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_port.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_stdio.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/wchar.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_mutex.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pthread.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sched.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sched.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/setjmp.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_pthread.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stdarg.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/time.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_list.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_uri.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_header.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_accept.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_type.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_accept_encoding.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_accept_language.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_alert_info.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_call_info.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_allow.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_length.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_authorization.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_call_id.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_contact.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_from.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_disposition.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_content_encoding.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_cseq.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_error_info.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_mime_version.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_proxy_authenticate.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_www_authenticate.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_proxy_authorization.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_record_route.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_route.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_to.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/headers/osip_via.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libosip2-2.0.4/installDir/include/osipparser2/osip_body.h:
+
+siproxd.h:
+
+log.h:

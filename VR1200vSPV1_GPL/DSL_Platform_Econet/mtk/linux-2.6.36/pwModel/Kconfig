@@ -1,0 +1,76 @@
+menu "PROWARE Model"
+
+choice
+        prompt "PROWARE Product Model"
+        default PW_MODEL_PVW42T1200ACGV1
+
+config  PW_MODEL_PVW41T300NV2
+        bool "Build PV-W41T-300N 2.0"
+
+config  PW_MODEL_PVW42T1200ACGV1
+        bool "Build PV-W42T-1200ACG 1.0"
+
+config  PW_MODEL_PVW422T1200ACGV1
+        bool "Build PV-W422T-1200ACG 1.0"
+
+config  PW_MODEL_PVW422T2100ACGV1
+        bool "Build PV-W422T-2100ACG 1.0"
+
+config  PW_MODEL_VR410V1
+        bool "Build Archer VR410 1.0"
+		
+config  PW_MODEL_ArcherVR500vAUV1
+        bool "Build ArcherVR500vAU 1.0"
+
+config  PW_MODEL_PVW422T1200ACGV1M2
+        bool "Build PV-W422T-1200ACG 1.0 M2 ISP"
+
+config  PW_MODEL_VMG1312T20AV1
+        bool "Build VMG1312-T20A 1.0"
+		
+config  PW_MODEL_ArcherVR1200vSPV1
+        bool "Build Archer VR1200v(SP) 1.0"
+endchoice
+
+
+choice
+		prompt "PROWARE product HW design"
+        default PW_HW_PVW422T1200_DESIGN
+		
+config  PW_HW_PVW41T300N_DESIGN
+        bool "PVW41T300N 16M flash , multi-color dsl led"
+		
+config  PW_HW_PVW422T1200_DESIGN
+        bool "PVW422T1200 16M flash , multi-color dsl led, voip led, wifi 5G"
+
+config  PW_HW_PVW422T2100_DESIGN
+        bool "PVW422T2100 16M flash , multi-color dsl led, voip led, wifi 5G"
+		
+config  PW_HW_OTHER_DESIGN
+        bool "other design"
+
+endchoice
+
+choice
+		prompt "PROWARE product flash size"
+        default PW_HW_FLASH_SIZE_16M
+		
+config  PW_HW_FLASH_SIZE_8M
+        bool "flash size 8M"
+		
+config  PW_HW_FLASH_SIZE_16M
+        bool "flash size 16M"	
+		
+config  PW_HW_FLASH_SIZE_32M
+        bool "flash size 32M"
+		
+endchoice	
+		
+config  PW_DSL_LED_BLINK_RULE
+        bool "tp dsl led blink rule"
+		
+config  PW_VOIP_LED_BLINK_RULE
+        bool "tp VOIP led blink rule"
+		
+endmenu
+

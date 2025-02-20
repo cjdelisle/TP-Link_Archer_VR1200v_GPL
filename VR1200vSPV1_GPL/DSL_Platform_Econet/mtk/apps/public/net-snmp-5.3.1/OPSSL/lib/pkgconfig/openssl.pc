@@ -1,0 +1,11 @@
+prefix=/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/openssl-1.0.0d/OPSSL
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: OpenSSL
+Description: Secure Sockets Layer and cryptography libraries and tools
+Version: 1.0.0d
+Requires: 
+Libs: -L${libdir} -lssl -lcrypto 
+Cflags: -I${includedir} 

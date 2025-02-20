@@ -1,0 +1,195 @@
+libusb_la-core.lo: core.c ../config.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/features.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_config.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/cdefs.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/errno.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm-generic/errno-base.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stdarg.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdio.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stddef.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/types.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wordsize.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/typesizes.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/pthreadtypes.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/endian.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/endian.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/byteswap.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap-common.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sgidefs.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_stdio.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/wchar.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wchar.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_mutex.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pthread.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sched.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/time.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sched.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/time.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_clk_tck.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/signal.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigset.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/setjmp.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_pthread.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/stdio_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/string.h \
+  /tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libusb-1.0.8/install/include/libusb-1.0/libusb.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdint.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/time.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/select.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/select.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/types.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/sysmacros.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/limits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/syslimits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/limits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix1_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/local_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/limits.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_local_lim.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix2_lim.h \
+  usb.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/unistd.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix_opt.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/confname.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/getopt.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdlib.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/alloca.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/dirent.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/dirent.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/syscall.h \
+  /mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sysnum.h \
+  usbi.h
+
+../config.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/features.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_config.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/cdefs.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm/errno.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/asm-generic/errno-base.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stdarg.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdio.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include/stddef.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/types.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wordsize.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/typesizes.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/pthreadtypes.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/endian.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/endian.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/byteswap.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/byteswap-common.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sgidefs.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_stdio.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/wchar.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/wchar.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_mutex.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/pthread.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sched.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/time.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sched.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/time.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_clk_tck.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/signal.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sigset.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/setjmp.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_pthread.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/stdio_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/string.h:
+
+/tmp/chih/Branch_for_Rel_EN7512_SDK_20150916/tclinux_phoenix/apps/public/libusb-1.0.8/install/include/libusb-1.0/libusb.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdint.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/time.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/select.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/select.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/types.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/sysmacros.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/limits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.3.6/include-fixed/syslimits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/limits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix1_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/local_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/linux/limits.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/uClibc_local_lim.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix2_lim.h:
+
+usb.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/unistd.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/posix_opt.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/confname.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/getopt.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/stdlib.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/alloca.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/dirent.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/dirent.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/sys/syscall.h:
+
+/mtkeda/bbn/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin/../mips-unknown-linux-uclibc/sysroot/usr/include/bits/sysnum.h:
+
+usbi.h:

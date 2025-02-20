@@ -1,0 +1,8 @@
+menu "Customer feature"
+
+config TCSUPPORT_CCT
+	bool "TCSUPPORT_CCT Support"
+	help
+		support CCT.
+		
+endmenu

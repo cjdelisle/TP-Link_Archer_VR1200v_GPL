@@ -1,0 +1,18 @@
+Version 1.1
+18 Sep 2017
+dingcheng(dingcheng@tp-link.com.cn)
+
+Take ArcherVR1200v(SP)1.0 for example
+
+make MODEL=ArcherVR1200vSPV1 env_build
+make MODEL=ArcherVR1200vSPV1 boot_build
+make MODEL=ArcherVR1200vSPV1 kernel_build(kernel_menuconfig)
+make MODEL=ArcherVR1200vSPV1 modules_build
+make MODEL=ArcherVR1200vSPV1 apps_build
+make MODEL=ArcherVR1200vSPV1 fs_build
+make MODEL=ArcherVR1200vSPV1 image_build
+
+
+Build All with follow script
+
+./buildall.sh MODEL=ArcherVR1200vSPV1

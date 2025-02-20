@@ -1,0 +1,12 @@
+prefix=/proj/mtk69516/linuxPJ/CT_ECN_MT7520S_C5_HEN_2/tclinux_phoenix/apps/public/libjson-1.5
+exec_prefix=${prefix}
+libdir=/proj/mtk69516/linuxPJ/CT_ECN_MT7520S_C5_HEN_2/tclinux_phoenix/apps/public/libjson-1.5
+includedir=/proj/mtk69516/linuxPJ/CT_ECN_MT7520S_C5_HEN_2/tclinux_phoenix/apps/public/libjson-1.5
+
+Name: mjson-1.5
+Description: M's JSON Parser
+Requires:
+Version: 1.5
+Libs: -L${libdir} -lmjson-1.5
+Cflags: -I${includedir}/mjson-1.5
+
